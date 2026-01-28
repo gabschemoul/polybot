@@ -3,16 +3,17 @@
 from datetime import datetime, timezone
 from uuid import uuid4
 
-from supabase import create_client, Client
 
-from polybot.brain.models import Simulation, SimulationMetrics, StrategyConfig
-from polybot.config.settings import get_settings
-from polybot.storage.knowledge import Insight, Experiment
-
-
-def get_supabase_client() -> Client | None:
+def get_supabase_client():
     """Get Supabase client if configured."""
+    try:
+        from supabase import create_client
+    except ImportError:
+        return None
+
+    from polybot.config.settings import get_settings
     settings = get_settings()
+
     if not settings.use_supabase:
         return None
     return create_client(settings.supabase_url, settings.supabase_key)
@@ -31,7 +32,7 @@ class SupabaseSimulationStore:
         short_uuid = uuid4().hex[:6]
         return f"SIM-{timestamp}-{short_uuid}"
 
-    def save(self, simulation: Simulation) -> str:
+    def save(self, simulation) -> str:
         """Save a simulation to Supabase."""
         if not self.client:
             return simulation.id
@@ -45,10 +46,12 @@ class SupabaseSimulationStore:
         self.client.table(self.table).upsert(data).execute()
         return simulation.id
 
-    def load(self, sim_id: str) -> Simulation | None:
+    def load(self, sim_id: str):
         """Load a simulation by ID."""
         if not self.client:
             return None
+
+        from polybot.brain.models import Simulation
 
         result = self.client.table(self.table).select("data").eq("id", sim_id).execute()
 
@@ -126,7 +129,7 @@ class SupabaseInsightStore:
         return f"EXP-{uuid4().hex[:8]}"
 
     # Insights
-    def add_insight(self, insight: Insight) -> str:
+    def add_insight(self, insight) -> str:
         """Add a new insight."""
         if not self.client:
             return insight.id
@@ -140,10 +143,12 @@ class SupabaseInsightStore:
         self.client.table(self.insights_table).upsert(data).execute()
         return insight.id
 
-    def get_insight(self, insight_id: str) -> Insight | None:
+    def get_insight(self, insight_id: str):
         """Get an insight by ID."""
         if not self.client:
             return None
+
+        from polybot.storage.knowledge import Insight
 
         result = self.client.table(self.insights_table).select("data").eq("id", insight_id).execute()
 
@@ -152,10 +157,12 @@ class SupabaseInsightStore:
 
         return Insight.model_validate(result.data[0]["data"])
 
-    def list_insights(self, category: str | None = None, validated_only: bool = False) -> list[Insight]:
+    def list_insights(self, category: str | None = None, validated_only: bool = False) -> list:
         """List all insights, optionally filtered."""
         if not self.client:
             return []
+
+        from polybot.storage.knowledge import Insight
 
         result = self.client.table(self.insights_table).select("data").order("created_at", desc=True).execute()
 
@@ -212,7 +219,7 @@ class SupabaseInsightStore:
         )
 
     # Experiments
-    def add_experiment(self, experiment: Experiment) -> str:
+    def add_experiment(self, experiment) -> str:
         """Add a new experiment."""
         if not self.client:
             return experiment.id
@@ -226,10 +233,12 @@ class SupabaseInsightStore:
         self.client.table(self.experiments_table).upsert(data).execute()
         return experiment.id
 
-    def list_experiments(self, status: str | None = None) -> list[Experiment]:
+    def list_experiments(self, status: str | None = None) -> list:
         """List experiments, optionally filtered by status."""
         if not self.client:
             return []
+
+        from polybot.storage.knowledge import Experiment
 
         result = self.client.table(self.experiments_table).select("data").order("created_at", desc=True).execute()
 
@@ -286,8 +295,10 @@ class SupabaseInsightStore:
         metrics: dict | None = None,
         tags: list[str] | None = None,
         suggested_experiments: list[str] | None = None,
-    ) -> Insight:
+    ):
         """Helper to create an insight from simulation results."""
+        from polybot.storage.knowledge import Insight
+
         insight = Insight(
             id=self.generate_insight_id(),
             discovered_at=datetime.now(timezone.utc),
