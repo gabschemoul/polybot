@@ -221,13 +221,26 @@ if st.button("🚀 Lancer la Simulation", type="primary", use_container_width=Tr
                 # Determine outcome (simplified: look at next candle)
                 if i + window_size < len(df):
                     future_price = df.iloc[i + window_size - 1]["close"]
-                    price_went_up = future_price > btc_price
+                    price_change_pct = (future_price - btc_price) / btc_price * 100
 
-                    # Did we win?
-                    if signal.direction == TradeDirection.UP:
-                        won = price_went_up
+                    # REALISTIC: Price must move by at least 0.05% to count as clear direction
+                    # Smaller moves = coin flip (market noise)
+                    import random
+                    min_move = 0.05  # 0.05% minimum move to count as directional
+
+                    if abs(price_change_pct) < min_move:
+                        # Price barely moved - random outcome (like real market noise)
+                        won = random.random() < 0.5
                     else:
-                        won = not price_went_up
+                        price_went_up = price_change_pct > 0
+                        if signal.direction == TradeDirection.UP:
+                            won = price_went_up
+                        else:
+                            won = not price_went_up
+
+                    # REALISTIC: 5% chance of bad execution (order filled at wrong time, etc)
+                    if random.random() < 0.05:
+                        won = not won  # Execution error flips the result
 
                     # Calculate position size based on method
                     position = calculate_position_size(signal.position_size, capital)
@@ -238,12 +251,11 @@ if st.button("🚀 Lancer la Simulation", type="primary", use_container_width=Tr
                     take_profit_pct = getattr(config, 'take_profit_pct', 0.90)
                     fee_rate = getattr(config, 'fee_pct', 0.01)
 
-                    # Apply slippage: you buy at a worse price than mid-market
-                    # Slippage increases with position size (market impact)
-                    import random
-                    base_slippage = fee_rate  # Same as fee setting
-                    size_impact = (position / capital) * 0.02  # Larger positions = more slippage
-                    random_slippage = random.uniform(0, 0.01)  # Market noise
+                    # REALISTIC slippage: you always pay more than mid-market
+                    # Real trading has significant friction
+                    base_slippage = 0.02  # 2% base slippage (spread + fees)
+                    size_impact = (position / capital) * 0.05  # Larger positions = more market impact
+                    random_slippage = random.uniform(0, 0.03)  # 0-3% random market noise
                     total_slippage = base_slippage + size_impact + random_slippage
 
                     # Adjust entry price for slippage (we pay more than mid-market)
