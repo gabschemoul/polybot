@@ -12,6 +12,7 @@ from polybot.brain.models import (
 def combine_indicator_signals(
     signals: list[IndicatorSignal],
     approach: StrategyApproach,
+    market_price: float = 0.5,
 ) -> tuple[float, TradeDirection, str]:
     """
     Combine multiple indicator signals into a single probability estimate.
@@ -23,13 +24,17 @@ def combine_indicator_signals(
         tuple of (probability 0-1, suggested direction, reasoning summary)
     """
     if not signals:
-        return 0.5, TradeDirection.UP, "Aucun indicateur actif"
+        # No indicators - choose direction based on market price (bet against the market)
+        direction = TradeDirection.DOWN if market_price > 0.5 else TradeDirection.UP
+        return 0.5, direction, "Aucun indicateur actif"
 
     # Filter signals with direction bias
     directional_signals = [s for s in signals if s.direction_bias is not None]
 
     if not directional_signals:
-        return 0.5, TradeDirection.UP, "Indicateurs neutres"
+        # All indicators neutral - choose direction based on market price
+        direction = TradeDirection.DOWN if market_price > 0.5 else TradeDirection.UP
+        return 0.5, direction, "Indicateurs neutres"
 
     # Count votes for each direction, weighted by strength
     up_score = sum(
@@ -41,7 +46,9 @@ def combine_indicator_signals(
 
     total_score = up_score + down_score
     if total_score == 0:
-        return 0.5, TradeDirection.UP, "Signaux équilibrés"
+        # Scores equal zero - choose direction based on market price
+        direction = TradeDirection.DOWN if market_price > 0.5 else TradeDirection.UP
+        return 0.5, direction, "Signaux équilibrés"
 
     # Determine direction and raw probability
     if up_score > down_score:
@@ -226,7 +233,7 @@ def generate_signal(
 
     # Combine indicators into probability estimate
     model_probability, direction, reasoning = combine_indicator_signals(
-        indicator_signals, config.approach
+        indicator_signals, config.approach, market_price
     )
 
     # Calculate EV
