@@ -68,6 +68,9 @@ class StrategyConfig(BaseModel):
     position_sizing: PositionSizing = Field(default=PositionSizing.KELLY, description="Position sizing method")
     martingale_base_pct: float = Field(default=0.01, gt=0, le=0.1, description="Base position for martingale (1% = 0.01)")
 
+    # Fees and slippage
+    fee_pct: float = Field(default=0.01, ge=0, le=0.1, description="Fee/slippage deducted from winning trades (1% = 0.01)")
+
 
 class IndicatorSignal(BaseModel):
     """Signal from a single indicator."""

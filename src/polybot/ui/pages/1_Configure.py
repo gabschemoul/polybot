@@ -136,6 +136,22 @@ with col3:
     )
     render_tooltip("max_position_pct")
 
+# Fees/slippage
+st.markdown("#### Frais & Slippage")
+col1, col2 = st.columns([2, 1])
+with col1:
+    default_fee = (base_config.fee_pct * 100) if (base_config and hasattr(base_config, 'fee_pct')) else 1.0
+    fee_pct = st.slider(
+        "Frais/Slippage (%)",
+        min_value=0.0,
+        max_value=5.0,
+        value=default_fee,
+        step=0.5,
+        help="Pourcentage déduit des gains pour simuler les frais de trading et le slippage (entrée à un prix moins favorable)."
+    )
+with col2:
+    st.info("💡 Sur Polymarket, compte ~1-2% de slippage + frais. Mets 0% pour un backtest optimiste.")
+
 st.divider()
 
 # Position Sizing Method
@@ -294,6 +310,7 @@ strategy_config = StrategyConfig(
     max_position_pct=max_position / 100,
     position_sizing=selected_sizing,
     martingale_base_pct=martingale_base / 100,
+    fee_pct=fee_pct / 100,
 )
 
 # Summary
@@ -308,6 +325,7 @@ with col1:
 with col2:
     st.metric("Confiance Minimum", f"{min_confidence:.0f}%")
     st.metric("Position Max", f"{max_position:.1f}%")
+    st.metric("Frais/Slippage", f"{fee_pct:.1f}%")
 
 with col3:
     st.metric("Capital", f"${initial_capital:,.0f}")

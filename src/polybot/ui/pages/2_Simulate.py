@@ -207,7 +207,10 @@ if st.button("🚀 Lancer la Simulation", type="primary", use_container_width=Tr
                     max_position_used = max(max_position_used, position)
 
                     if won:
-                        pnl = position * (1 - market_price) / market_price
+                        gross_pnl = position * (1 - market_price) / market_price
+                        # Apply fee/slippage to winning trades
+                        fee_rate = getattr(config, 'fee_pct', 0.01)
+                        pnl = gross_pnl * (1 - fee_rate)
                         result = TradeResult.WIN
                     else:
                         pnl = -position
