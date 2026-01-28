@@ -223,25 +223,14 @@ if st.button("🚀 Lancer la Simulation", type="primary", use_container_width=Tr
                     future_price = df.iloc[i + window_size - 1]["close"]
                     price_change_pct = (future_price - btc_price) / btc_price * 100
 
-                    # Determine if price went up or down
-                    import random
+                    # REAL: Did the price actually go up or down?
                     price_went_up = future_price > btc_price
 
+                    # REAL: Was our prediction correct?
                     if signal.direction == TradeDirection.UP:
                         won = price_went_up
                     else:
                         won = not price_went_up
-
-                    # REALITY CHECK: Backtests overestimate edge. In real markets:
-                    # - Market is efficient, your "edge" is mostly luck
-                    # - Execution timing is never perfect
-                    # - Other traders see same signals
-                    # - Psychological errors
-                    #
-                    # Apply 15% "reality tax" - your prediction randomly fails
-                    # This brings theoretical 57% win rate down to ~50-52%
-                    if random.random() < 0.15:
-                        won = not won
 
                     # Calculate position size based on method
                     position = calculate_position_size(signal.position_size, capital)
@@ -252,12 +241,9 @@ if st.button("🚀 Lancer la Simulation", type="primary", use_container_width=Tr
                     take_profit_pct = getattr(config, 'take_profit_pct', 0.90)
                     fee_rate = getattr(config, 'fee_pct', 0.01)
 
-                    # REALISTIC slippage: you always pay more than mid-market
-                    # Real trading has significant friction
-                    base_slippage = 0.02  # 2% base slippage (spread + fees)
-                    size_impact = (position / capital) * 0.05  # Larger positions = more market impact
-                    random_slippage = random.uniform(0, 0.03)  # 0-3% random market noise
-                    total_slippage = base_slippage + size_impact + random_slippage
+                    # Slippage = what the user configured as fee_pct
+                    # This represents spread + fees + slippage combined
+                    total_slippage = fee_rate
 
                     # Adjust entry price for slippage (we pay more than mid-market)
                     if signal.direction == TradeDirection.UP:
