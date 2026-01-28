@@ -28,21 +28,11 @@ def combine_indicator_signals(
         # No indicators configured - NO TRADE
         return 0.5, TradeDirection.UP, "Aucun indicateur actif", False
 
-    # Filter signals based on approach
-    # Mean Reversion = RSI, Bollinger (look for overbought/oversold extremes)
-    # Momentum = MACD, EMA Cross (follow the trend)
-    mean_reversion_indicators = ["RSI", "Bollinger"]
-    momentum_indicators = ["MACD", "EMA Cross"]
-
-    if approach == StrategyApproach.MEAN_REVERSION:
-        relevant_signals = [s for s in signals if s.name in mean_reversion_indicators]
-    elif approach == StrategyApproach.MOMENTUM:
-        relevant_signals = [s for s in signals if s.name in momentum_indicators]
-    else:  # AUTO or HYBRID - use all
-        relevant_signals = signals
+    # Use ALL indicators regardless of approach - let them all vote
+    relevant_signals = signals
 
     if not relevant_signals:
-        return 0.5, TradeDirection.UP, "Aucun indicateur pertinent pour cette approche", False
+        return 0.5, TradeDirection.UP, "Aucun indicateur actif", False
 
     # Filter signals with direction bias (non-neutral)
     directional_signals = [s for s in relevant_signals if s.direction_bias is not None]
