@@ -17,8 +17,9 @@ def combine_indicator_signals(
     """
     Combine multiple indicator signals into a single probability estimate.
 
-    For MEAN_REVERSION: Indicators suggesting reversal are weighted higher
-    For MOMENTUM: Indicators confirming trend continuation are weighted higher
+    For MEAN_REVERSION: ONLY use RSI and Bollinger (look for reversals)
+    For MOMENTUM: ONLY use MACD and EMA Cross (follow the trend)
+    For AUTO/HYBRID: Use all indicators
 
     Returns:
         tuple of (probability 0-1, suggested direction, reasoning summary, has_signal)
@@ -27,11 +28,27 @@ def combine_indicator_signals(
         # No indicators configured - NO TRADE
         return 0.5, TradeDirection.UP, "Aucun indicateur actif", False
 
-    # Filter signals with direction bias
-    directional_signals = [s for s in signals if s.direction_bias is not None]
+    # Filter signals based on approach
+    # Mean Reversion = RSI, Bollinger (look for overbought/oversold extremes)
+    # Momentum = MACD, EMA Cross (follow the trend)
+    mean_reversion_indicators = ["RSI", "Bollinger"]
+    momentum_indicators = ["MACD", "EMA Cross"]
+
+    if approach == StrategyApproach.MEAN_REVERSION:
+        relevant_signals = [s for s in signals if s.name in mean_reversion_indicators]
+    elif approach == StrategyApproach.MOMENTUM:
+        relevant_signals = [s for s in signals if s.name in momentum_indicators]
+    else:  # AUTO or HYBRID - use all
+        relevant_signals = signals
+
+    if not relevant_signals:
+        return 0.5, TradeDirection.UP, "Aucun indicateur pertinent pour cette approche", False
+
+    # Filter signals with direction bias (non-neutral)
+    directional_signals = [s for s in relevant_signals if s.direction_bias is not None]
 
     if not directional_signals:
-        # All indicators neutral (RSI 30-70, Bollinger middle, etc.) - NO TRADE
+        # All relevant indicators neutral - NO TRADE
         return 0.5, TradeDirection.UP, "Indicateurs neutres - pas de signal clair", False
 
     # Count votes for each direction, weighted by strength
@@ -57,15 +74,10 @@ def combine_indicator_signals(
         raw_prob = down_score / total_score
         winning_signals = [s for s in directional_signals if s.direction_bias == TradeDirection.DOWN]
 
-    # Apply approach-specific adjustments
-    if approach == StrategyApproach.MEAN_REVERSION:
-        # Mean reversion: boost signals from RSI and Bollinger
-        boost = sum(0.05 for s in winning_signals if s.name in ["RSI", "Bollinger"])
-        raw_prob = min(0.95, raw_prob + boost)
-    elif approach == StrategyApproach.MOMENTUM:
-        # Momentum: boost signals from MACD and EMA
-        boost = sum(0.05 for s in winning_signals if s.name in ["MACD", "EMA Cross"])
-        raw_prob = min(0.95, raw_prob + boost)
+    # Apply strength boost based on signal agreement
+    if len(winning_signals) > 1:
+        # Multiple indicators agree - boost confidence
+        raw_prob = min(0.95, raw_prob + 0.05 * len(winning_signals))
 
     # Scale to realistic probability range (0.45 - 0.75 for crypto short-term)
     # No model should claim >75% accuracy on 15-min crypto movements
