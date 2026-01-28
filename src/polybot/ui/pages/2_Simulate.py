@@ -108,6 +108,9 @@ if st.button("🚀 Lancer la Simulation", type="primary", use_container_width=Tr
 
         indicator_configs = [ind.model_dump() for ind in config.indicators]
 
+        # DEBUG: Show what's being used
+        st.info(f"🔧 DEBUG - Approche: **{config.approach.value}** | Indicateurs: **{[ind['name'] for ind in indicator_configs]}**")
+
         # Step 3: Simulate market windows (every 15 minutes)
         progress_bar.progress(40, text="Simulation des trades...")
 
@@ -117,6 +120,12 @@ if st.button("🚀 Lancer la Simulation", type="primary", use_container_width=Tr
         # Initialize simulation
         sim_store = get_simulation_store()
         sim_id = sim_store.generate_id()
+
+        # DEBUG: Track signal directions
+        debug_signals_up = 0
+        debug_signals_down = 0
+        debug_signals_neutral = 0
+        debug_sample_signals = []
 
         trades: list[Trade] = []
         capital = config.initial_capital
@@ -170,6 +179,19 @@ if st.button("🚀 Lancer la Simulation", type="primary", use_container_width=Tr
 
             # Calculate indicators
             signals = calculate_indicators(window_df, indicator_configs)
+
+            # DEBUG: Track indicator signals
+            for sig in signals:
+                if sig.direction_bias == TradeDirection.UP:
+                    debug_signals_up += 1
+                elif sig.direction_bias == TradeDirection.DOWN:
+                    debug_signals_down += 1
+                else:
+                    debug_signals_neutral += 1
+
+            # Capture first few signals for display
+            if len(debug_sample_signals) < 5 and signals:
+                debug_sample_signals.append([f"{s.name}:{s.direction_bias.value if s.direction_bias else 'NEUTRAL'}({s.value})" for s in signals])
 
             # Get current BTC price
             btc_price = window_df["close"].iloc[-1]
@@ -359,9 +381,18 @@ if st.button("🚀 Lancer la Simulation", type="primary", use_container_width=Tr
         with col4:
             st.metric("Capital Final", f"${capital:,.2f}")
 
+        # DEBUG: Show signal breakdown
+        st.markdown("#### 🔧 DEBUG - Signaux bruts des indicateurs")
+        st.write(f"Signaux UP: {debug_signals_up} | Signaux DOWN: {debug_signals_down} | Signaux NEUTRES: {debug_signals_neutral}")
+        st.write(f"Exemples de signaux: {debug_sample_signals[:3]}")
+
+        st.markdown("#### 🔧 DEBUG - Trades exécutés")
+        st.write(f"Total trades: {len(trades)}")
+
         # Direction stats
         up_trades = [t for t in trades if t.direction == TradeDirection.UP]
         down_trades = [t for t in trades if t.direction == TradeDirection.DOWN]
+        st.write(f"Trades UP: {len(up_trades)} | Trades DOWN: {len(down_trades)}")
 
         if trades:
             st.markdown("#### 📊 Répartition des Directions")
