@@ -46,12 +46,13 @@ with col4:
         PositionSizing.FIXED: "Fixe",
         PositionSizing.MARTINGALE: "Martingale",
     }
-    st.metric("Position", sizing_labels.get(config.position_sizing, "Kelly"))
+    current_sizing = getattr(config, 'position_sizing', PositionSizing.KELLY)
+    st.metric("Position", sizing_labels.get(current_sizing, "Kelly"))
 with col5:
     st.metric("Capital", f"${config.initial_capital:,.0f}")
 
 # Martingale warning
-if config.position_sizing == PositionSizing.MARTINGALE:
+if getattr(config, 'position_sizing', None) == PositionSizing.MARTINGALE:
     st.warning("⚠️ **Mode Martingale actif** — Cette simulation va démontrer pourquoi la martingale est dangereuse. Observe le comportement du capital !")
 
 st.divider()
@@ -129,22 +130,32 @@ if st.button("🚀 Lancer la Simulation", type="primary", use_container_width=Tr
 
         def calculate_position_size(signal_size: float, current_capital: float) -> float:
             """Calculate position size based on strategy method."""
-            if config.position_sizing == PositionSizing.KELLY:
+            # Get position sizing method with fallback for old configs
+            sizing = getattr(config, 'position_sizing', PositionSizing.KELLY)
+            if isinstance(sizing, str):
+                try:
+                    sizing = PositionSizing(sizing)
+                except ValueError:
+                    sizing = PositionSizing.KELLY
+
+            if sizing == PositionSizing.KELLY:
                 # Kelly: use signal's suggested size, capped by max_position_pct
                 return min(signal_size, current_capital * config.max_position_pct)
 
-            elif config.position_sizing == PositionSizing.FIXED:
+            elif sizing == PositionSizing.FIXED:
                 # Fixed: always use max_position_pct
                 return current_capital * config.max_position_pct
 
-            elif config.position_sizing == PositionSizing.MARTINGALE:
+            elif sizing == PositionSizing.MARTINGALE:
                 # Martingale: base * 2^consecutive_losses
-                base_position = current_capital * config.martingale_base_pct
+                base_pct = getattr(config, 'martingale_base_pct', 0.01)
+                base_position = current_capital * base_pct
                 position = base_position * martingale_multiplier
                 # Cap at remaining capital
                 return min(position, current_capital * 0.9)  # Never bet more than 90%
 
-            return signal_size
+            # Fallback: use signal size capped by max position
+            return min(signal_size, current_capital * config.max_position_pct)
 
         # Process data in 15-minute windows
         window_size = 15 if interval == "1m" else (3 if interval == "5m" else 1)
@@ -308,7 +319,7 @@ if st.button("🚀 Lancer la Simulation", type="primary", use_container_width=Tr
             st.metric("Capital Final", f"${capital:,.2f}")
 
         # Martingale specific metrics
-        if config.position_sizing == PositionSizing.MARTINGALE:
+        if getattr(config, 'position_sizing', None) == PositionSizing.MARTINGALE:
             st.markdown("### ⚠️ Analyse Martingale")
             mcol1, mcol2, mcol3 = st.columns(3)
 
@@ -352,7 +363,7 @@ if st.button("🚀 Lancer la Simulation", type="primary", use_container_width=Tr
                     "P&L": f"${t.pnl:+.2f}",
                 }
                 # Add position size for martingale to show escalation
-                if config.position_sizing == PositionSizing.MARTINGALE:
+                if getattr(config, 'position_sizing', None) == PositionSizing.MARTINGALE:
                     row["Position"] = f"${t.position_size:.2f}"
                 trade_data.append(row)
 
