@@ -104,10 +104,12 @@ def calculate_expected_value(
     # For DOWN direction, we're buying NO at (1 - market_price)
     if direction == TradeDirection.UP:
         buy_price = market_price
-        p_win = model_probability
     else:
         buy_price = 1 - market_price
-        p_win = 1 - model_probability
+
+    # model_probability is the probability that our chosen direction wins
+    # (not always P(UP) - it's P(direction we chose))
+    p_win = model_probability
 
     # EV calculation
     gain_if_win = 1 - buy_price  # Payout is always $1, minus what we paid
