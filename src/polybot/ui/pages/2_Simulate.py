@@ -152,8 +152,9 @@ if st.button("🚀 Lancer la Simulation", type="primary", use_container_width=Tr
                 return min(signal_size, current_capital * config.max_position_pct)
 
             elif sizing == PositionSizing.FIXED:
-                # Fixed: always use max_position_pct
-                return current_capital * config.max_position_pct
+                # Fixed: always use max_position_pct of INITIAL capital (no compounding)
+                # More realistic: you don't reinvest gains immediately
+                return config.initial_capital * config.max_position_pct
 
             elif sizing == PositionSizing.MARTINGALE:
                 # Martingale: base * 2^consecutive_losses
