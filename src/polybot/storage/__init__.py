@@ -30,4 +30,10 @@ def get_insight_store():
         return InsightStore()
 
 
-__all__ = ["get_simulation_store", "get_insight_store"]
+def get_strategy_store():
+    """Get the strategy store for leaderboard."""
+    from polybot.storage.strategies import StrategyStore
+    return StrategyStore()
+
+
+__all__ = ["get_simulation_store", "get_insight_store", "get_strategy_store"]

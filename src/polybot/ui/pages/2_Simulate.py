@@ -66,9 +66,9 @@ with col1:
     days_back = st.slider(
         "Période de backtest (jours)",
         min_value=1,
-        max_value=30,
+        max_value=90,
         value=7,
-        help="Sur combien de jours historiques tester la stratégie"
+        help="Sur combien de jours historiques tester la stratégie (max 90 jours)"
     )
 
 with col2:
@@ -206,15 +206,44 @@ if st.button("🚀 Lancer la Simulation", type="primary", use_container_width=Tr
                     position = calculate_position_size(signal.position_size, capital)
                     max_position_used = max(max_position_used, position)
 
-                    if won:
-                        gross_pnl = position * (1 - market_price) / market_price
-                        # Apply fee/slippage to winning trades
-                        fee_rate = getattr(config, 'fee_pct', 0.01)
-                        pnl = gross_pnl * (1 - fee_rate)
-                        result = TradeResult.WIN
+                    # Check if take profit is enabled
+                    take_profit_enabled = getattr(config, 'take_profit_enabled', False)
+                    take_profit_pct = getattr(config, 'take_profit_pct', 0.90)
+                    fee_rate = getattr(config, 'fee_pct', 0.01)
+
+                    if take_profit_enabled:
+                        # Simulate take profit: exit at take_profit_pct instead of waiting for resolution
+                        # If direction is UP and price would have gone up, we exit at TP level
+                        # If direction is DOWN, we're betting on NO, so we want price to go down
+                        if signal.direction == TradeDirection.UP:
+                            # We bought YES at market_price, exit at take_profit_pct
+                            exit_price = take_profit_pct if won else 0.0
+                        else:
+                            # We bought NO at (1 - market_price), exit at (1 - take_profit_pct) for NO
+                            exit_price = (1 - take_profit_pct) if won else 0.0
+
+                        if won:
+                            # Profit = (exit_price - entry_price) * shares
+                            # shares = position / entry_price
+                            if signal.direction == TradeDirection.UP:
+                                gross_pnl = position * (exit_price - market_price) / market_price
+                            else:
+                                entry_no = 1 - market_price
+                                gross_pnl = position * ((1 - exit_price) - entry_no) / entry_no
+                            pnl = gross_pnl * (1 - fee_rate)
+                            result = TradeResult.WIN
+                        else:
+                            pnl = -position
+                            result = TradeResult.LOSS
                     else:
-                        pnl = -position
-                        result = TradeResult.LOSS
+                        # Original logic: hold until resolution (0 or 1)
+                        if won:
+                            gross_pnl = position * (1 - market_price) / market_price
+                            pnl = gross_pnl * (1 - fee_rate)
+                            result = TradeResult.WIN
+                        else:
+                            pnl = -position
+                            result = TradeResult.LOSS
 
                     capital += pnl
                     trade_count += 1
@@ -276,10 +305,13 @@ if st.button("🚀 Lancer la Simulation", type="primary", use_container_width=Tr
         )
 
         # Step 5: Create and save simulation
+        saved_strategy_id = st.session_state.get('saved_strategy_id', None)
+
         simulation = Simulation(
             id=sim_id,
             created_at=datetime.now(timezone.utc),
             strategy=config,
+            saved_strategy_id=saved_strategy_id,
             start_time=df["timestamp"].iloc[0],
             end_time=df["timestamp"].iloc[-1],
             initial_capital=config.initial_capital,
@@ -289,6 +321,12 @@ if st.button("🚀 Lancer la Simulation", type="primary", use_container_width=Tr
         )
 
         sim_store.save(simulation)
+
+        # Update strategy stats if linked to a saved strategy
+        if saved_strategy_id:
+            from polybot.storage import get_strategy_store
+            strategy_store = get_strategy_store()
+            strategy_store.update_stats_from_simulation(saved_strategy_id, simulation)
 
         progress_bar.progress(100, text="Terminé!")
 
@@ -320,6 +358,26 @@ if st.button("🚀 Lancer la Simulation", type="primary", use_container_width=Tr
 
         with col4:
             st.metric("Capital Final", f"${capital:,.2f}")
+
+        # Direction stats
+        up_trades = [t for t in trades if t.direction == TradeDirection.UP]
+        down_trades = [t for t in trades if t.direction == TradeDirection.DOWN]
+
+        if trades:
+            st.markdown("#### 📊 Répartition des Directions")
+            dcol1, dcol2, dcol3, dcol4 = st.columns(4)
+            with dcol1:
+                st.metric("Trades UP 📈", len(up_trades))
+            with dcol2:
+                up_wins = len([t for t in up_trades if t.result == TradeResult.WIN])
+                up_wr = up_wins / len(up_trades) * 100 if up_trades else 0
+                st.metric("Win Rate UP", f"{up_wr:.0f}%")
+            with dcol3:
+                st.metric("Trades DOWN 📉", len(down_trades))
+            with dcol4:
+                down_wins = len([t for t in down_trades if t.result == TradeResult.WIN])
+                down_wr = down_wins / len(down_trades) * 100 if down_trades else 0
+                st.metric("Win Rate DOWN", f"{down_wr:.0f}%")
 
         # Martingale specific metrics
         if getattr(config, 'position_sizing', None) == PositionSizing.MARTINGALE:

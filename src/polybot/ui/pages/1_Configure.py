@@ -152,6 +152,32 @@ with col1:
 with col2:
     st.info("💡 Sur Polymarket, compte ~1-2% de slippage + frais. Mets 0% pour un backtest optimiste.")
 
+# Take Profit
+st.markdown("#### Take Profit (Sortie anticipée)")
+col1, col2 = st.columns([2, 1])
+with col1:
+    default_tp_enabled = (base_config.take_profit_enabled) if (base_config and hasattr(base_config, 'take_profit_enabled')) else False
+    take_profit_enabled = st.checkbox(
+        "Activer Take Profit",
+        value=default_tp_enabled,
+        help="Sortir du trade quand le prix atteint un certain niveau au lieu d'attendre la résolution"
+    )
+
+    default_tp_pct = (base_config.take_profit_pct * 100) if (base_config and hasattr(base_config, 'take_profit_pct')) else 90.0
+    take_profit_pct = default_tp_pct
+    if take_profit_enabled:
+        take_profit_pct = st.slider(
+            "Niveau de sortie (%)",
+            min_value=60.0,
+            max_value=99.0,
+            value=default_tp_pct,
+            step=5.0,
+            help="Sortir quand le prix du marché atteint ce niveau (ex: 90% = vendre quand le YES atteint $0.90)"
+        )
+with col2:
+    if take_profit_enabled:
+        st.info(f"💡 Tu sortiras quand le prix atteint {take_profit_pct:.0f}% au lieu d'attendre 100% (résolution).")
+
 st.divider()
 
 # Position Sizing Method
@@ -311,6 +337,8 @@ strategy_config = StrategyConfig(
     position_sizing=selected_sizing,
     martingale_base_pct=martingale_base / 100,
     fee_pct=fee_pct / 100,
+    take_profit_enabled=take_profit_enabled,
+    take_profit_pct=take_profit_pct / 100,
 )
 
 # Summary
@@ -353,7 +381,35 @@ if min_ev < 5:
 # Save button
 st.divider()
 
-if st.button("✅ Sauvegarder et Continuer vers Simulation", type="primary", use_container_width=True):
-    st.session_state.strategy_config = strategy_config
-    st.success("Configuration sauvegardée ! Va sur la page Simulation pour lancer un backtest.")
-    st.balloons()
+col1, col2 = st.columns(2)
+
+with col1:
+    if st.button("✅ Sauvegarder et Continuer vers Simulation", type="primary", use_container_width=True):
+        st.session_state.strategy_config = strategy_config
+        st.success("Configuration sauvegardée ! Va sur la page Simulation pour lancer un backtest.")
+        st.balloons()
+
+with col2:
+    with st.expander("💾 Sauvegarder dans le Classement"):
+        st.markdown("Donne un nom à ta stratégie pour la sauvegarder et la comparer avec d'autres.")
+
+        strategy_name = st.text_input(
+            "Nom de la stratégie",
+            value=strategy_config.name,
+            placeholder="Ex: Ma Stratégie Momentum Aggressive"
+        )
+        author_name = st.text_input(
+            "Ton pseudo",
+            placeholder="Ex: TraderPro42"
+        )
+
+        if st.button("💾 Sauvegarder pour le Classement", use_container_width=True):
+            if strategy_name and author_name:
+                from polybot.storage import get_strategy_store
+                store = get_strategy_store()
+                saved = store.create_from_config(strategy_config, strategy_name, author_name)
+                st.session_state.strategy_config = strategy_config
+                st.session_state.saved_strategy_id = saved.id
+                st.success(f"✅ Stratégie '{strategy_name}' sauvegardée ! ID: {saved.id}")
+            else:
+                st.warning("Remplis le nom et ton pseudo.")

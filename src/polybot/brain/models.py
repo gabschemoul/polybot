@@ -71,6 +71,10 @@ class StrategyConfig(BaseModel):
     # Fees and slippage
     fee_pct: float = Field(default=0.01, ge=0, le=0.1, description="Fee/slippage deducted from winning trades (1% = 0.01)")
 
+    # Take profit
+    take_profit_enabled: bool = Field(default=False, description="Exit early when price reaches target")
+    take_profit_pct: float = Field(default=0.90, ge=0.6, le=0.99, description="Exit when market price reaches this level (0.90 = 90%)")
+
 
 class IndicatorSignal(BaseModel):
     """Signal from a single indicator."""
@@ -167,12 +171,30 @@ class SimulationMetrics(BaseModel):
     max_position_used: float = 0.0  # Largest position taken
 
 
+class SavedStrategy(BaseModel):
+    """A named strategy configuration with performance stats."""
+
+    id: str
+    name: str
+    author: str = ""
+    created_at: datetime
+    config: StrategyConfig
+    # Aggregated performance from simulations using this strategy
+    total_simulations: int = 0
+    total_pnl: float = 0.0
+    avg_pnl_pct: float = 0.0
+    best_pnl_pct: float = 0.0
+    total_trades: int = 0
+    overall_win_rate: float = 0.0
+
+
 class Simulation(BaseModel):
     """Complete simulation record."""
 
     id: str
     created_at: datetime
     strategy: StrategyConfig
+    saved_strategy_id: str | None = None  # Link to saved strategy if applicable
 
     # Time range
     start_time: datetime
