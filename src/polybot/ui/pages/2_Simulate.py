@@ -14,7 +14,7 @@ from polybot.brain.models import (
 )
 from polybot.brain.indicators import calculate_indicators
 from polybot.brain.ev_calculator import generate_signal
-from polybot.data.binance import BinanceClient
+from polybot.data.crypto_data import CryptoDataClient
 from polybot.data.polymarket import MockPolymarketClient
 from polybot.storage import get_simulation_store
 
@@ -77,8 +77,8 @@ if st.button("🚀 Lancer la Simulation", type="primary", use_container_width=Tr
         # Step 1: Fetch BTC data
         progress_bar.progress(10, text="Récupération des données BTC...")
 
-        with BinanceClient() as binance:
-            df = binance.get_historical_klines(
+        with CryptoDataClient() as crypto:
+            df = crypto.get_historical_klines(
                 symbol="BTCUSDT",
                 interval=interval,
                 days=days_back,
