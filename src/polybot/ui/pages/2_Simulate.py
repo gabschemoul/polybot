@@ -238,34 +238,48 @@ if st.button("🚀 Lancer la Simulation", type="primary", use_container_width=Tr
                     take_profit_pct = getattr(config, 'take_profit_pct', 0.90)
                     fee_rate = getattr(config, 'fee_pct', 0.01)
 
+                    # Apply slippage: you buy at a worse price than mid-market
+                    # Slippage increases with position size (market impact)
+                    import random
+                    base_slippage = fee_rate  # Same as fee setting
+                    size_impact = (position / capital) * 0.02  # Larger positions = more slippage
+                    random_slippage = random.uniform(0, 0.01)  # Market noise
+                    total_slippage = base_slippage + size_impact + random_slippage
+
+                    # Adjust entry price for slippage (we pay more than mid-market)
+                    if signal.direction == TradeDirection.UP:
+                        effective_entry = min(0.95, market_price * (1 + total_slippage))
+                    else:
+                        effective_entry = max(0.05, (1 - market_price) * (1 + total_slippage))
+
                     if take_profit_enabled:
                         # Simulate take profit: exit at take_profit_pct instead of waiting for resolution
-                        # If direction is UP and price would have gone up, we exit at TP level
-                        # If direction is DOWN, we're betting on NO, so we want price to go down
                         if signal.direction == TradeDirection.UP:
-                            # We bought YES at market_price, exit at take_profit_pct
                             exit_price = take_profit_pct if won else 0.0
                         else:
-                            # We bought NO at (1 - market_price), exit at (1 - take_profit_pct) for NO
                             exit_price = (1 - take_profit_pct) if won else 0.0
 
                         if won:
-                            # Profit = (exit_price - entry_price) * shares
-                            # shares = position / entry_price
                             if signal.direction == TradeDirection.UP:
-                                gross_pnl = position * (exit_price - market_price) / market_price
+                                # Bought YES at effective_entry, exit at take_profit
+                                gross_pnl = position * (exit_price - effective_entry) / effective_entry
                             else:
-                                entry_no = 1 - market_price
-                                gross_pnl = position * ((1 - exit_price) - entry_no) / entry_no
-                            pnl = gross_pnl * (1 - fee_rate)
-                            result = TradeResult.WIN
+                                # Bought NO at effective_entry, exit at (1 - exit_price)
+                                gross_pnl = position * ((1 - exit_price) - effective_entry) / effective_entry
+                            pnl = max(0, gross_pnl)  # Can't lose more than position on a "win"
+                            result = TradeResult.WIN if pnl > 0 else TradeResult.LOSS
                         else:
                             pnl = -position
                             result = TradeResult.LOSS
                     else:
-                        # Original logic: hold until resolution (0 or 1)
+                        # Hold until resolution (0 or 1)
                         if won:
-                            gross_pnl = position * (1 - market_price) / market_price
+                            if signal.direction == TradeDirection.UP:
+                                # Bought YES at effective_entry, resolves to 1.0
+                                gross_pnl = position * (1.0 - effective_entry) / effective_entry
+                            else:
+                                # Bought NO at effective_entry, resolves to 1.0
+                                gross_pnl = position * (1.0 - effective_entry) / effective_entry
                             pnl = gross_pnl * (1 - fee_rate)
                             result = TradeResult.WIN
                         else:
