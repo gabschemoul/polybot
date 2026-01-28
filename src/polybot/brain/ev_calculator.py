@@ -13,7 +13,7 @@ def combine_indicator_signals(
     signals: list[IndicatorSignal],
     approach: StrategyApproach,
     market_price: float = 0.5,
-) -> tuple[float, TradeDirection, str]:
+) -> tuple[float, TradeDirection, str, bool]:
     """
     Combine multiple indicator signals into a single probability estimate.
 
@@ -21,20 +21,18 @@ def combine_indicator_signals(
     For MOMENTUM: Indicators confirming trend continuation are weighted higher
 
     Returns:
-        tuple of (probability 0-1, suggested direction, reasoning summary)
+        tuple of (probability 0-1, suggested direction, reasoning summary, has_signal)
     """
     if not signals:
-        # No indicators - choose direction based on market price (bet against the market)
-        direction = TradeDirection.DOWN if market_price > 0.5 else TradeDirection.UP
-        return 0.5, direction, "Aucun indicateur actif"
+        # No indicators configured - NO TRADE
+        return 0.5, TradeDirection.UP, "Aucun indicateur actif", False
 
     # Filter signals with direction bias
     directional_signals = [s for s in signals if s.direction_bias is not None]
 
     if not directional_signals:
-        # All indicators neutral - choose direction based on market price
-        direction = TradeDirection.DOWN if market_price > 0.5 else TradeDirection.UP
-        return 0.5, direction, "Indicateurs neutres"
+        # All indicators neutral (RSI 30-70, Bollinger middle, etc.) - NO TRADE
+        return 0.5, TradeDirection.UP, "Indicateurs neutres - pas de signal clair", False
 
     # Count votes for each direction, weighted by strength
     up_score = sum(
@@ -46,11 +44,10 @@ def combine_indicator_signals(
 
     total_score = up_score + down_score
     if total_score == 0:
-        # Scores equal zero - choose direction based on market price
-        direction = TradeDirection.DOWN if market_price > 0.5 else TradeDirection.UP
-        return 0.5, direction, "Signaux équilibrés"
+        # No strength in signals - NO TRADE
+        return 0.5, TradeDirection.UP, "Signaux sans force", False
 
-    # Determine direction and raw probability
+    # Determine direction and raw probability based on INDICATORS
     if up_score > down_score:
         direction = TradeDirection.UP
         raw_prob = up_score / total_score
@@ -78,7 +75,7 @@ def combine_indicator_signals(
     signal_descriptions = [f"{s.name}: {s.interpretation}" for s in winning_signals]
     reasoning = f"Direction {direction.value.upper()} basée sur: {', '.join(signal_descriptions)}"
 
-    return scaled_prob, direction, reasoning
+    return scaled_prob, direction, reasoning, True  # has_signal = True
 
 
 def calculate_expected_value(
@@ -232,7 +229,7 @@ def generate_signal(
         timestamp = datetime.now(timezone.utc)
 
     # Combine indicators into probability estimate
-    model_probability, direction, reasoning = combine_indicator_signals(
+    model_probability, direction, reasoning, has_signal = combine_indicator_signals(
         indicator_signals, config.approach, market_price
     )
 
@@ -243,7 +240,8 @@ def generate_signal(
     confidence = calculate_confidence(indicator_signals, model_probability)
 
     # Determine if we should trade
-    should_trade = ev >= config.min_ev and confidence >= config.min_confidence
+    # MUST have a signal from indicators + meet EV and confidence thresholds
+    should_trade = has_signal and ev >= config.min_ev and confidence >= config.min_confidence
 
     # Calculate position size if trading
     position_size = 0.0
