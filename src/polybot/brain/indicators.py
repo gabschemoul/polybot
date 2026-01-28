@@ -22,17 +22,17 @@ def calculate_rsi(df: pd.DataFrame, period: int = 14) -> IndicatorSignal:
     rsi_series = ta.rsi(df["close"], length=period)
     rsi_value = rsi_series.iloc[-1] if not rsi_series.empty else 50.0
 
-    # Interpretation for mean reversion (default)
-    if rsi_value < 30:
-        interpretation = "Survendu (potentiel rebond)"
+    # Interpretation for mean reversion - more sensitive thresholds
+    if rsi_value < 40:
+        interpretation = f"Survendu ({rsi_value:.0f} < 40)"
         direction = TradeDirection.UP
-        strength = (30 - rsi_value) / 30  # More oversold = stronger signal
-    elif rsi_value > 70:
-        interpretation = "Suracheté (risque correction)"
+        strength = (40 - rsi_value) / 40  # More oversold = stronger signal
+    elif rsi_value > 60:
+        interpretation = f"Suracheté ({rsi_value:.0f} > 60)"
         direction = TradeDirection.DOWN
-        strength = (rsi_value - 70) / 30
+        strength = (rsi_value - 60) / 40
     else:
-        interpretation = "Zone neutre"
+        interpretation = f"Zone neutre ({rsi_value:.0f})"
         direction = None
         strength = 0.0
 
@@ -143,14 +143,14 @@ def calculate_bollinger(df: pd.DataFrame, period: int = 20, std: float = 2.0) ->
     else:
         position = 0.5
 
-    if position < 0.2:
+    if position < 0.35:
         interpretation = f"Proche bande basse ({position:.0%})"
         direction = TradeDirection.UP
-        strength = (0.2 - position) / 0.2
-    elif position > 0.8:
+        strength = (0.35 - position) / 0.35
+    elif position > 0.65:
         interpretation = f"Proche bande haute ({position:.0%})"
         direction = TradeDirection.DOWN
-        strength = (position - 0.8) / 0.2
+        strength = (position - 0.65) / 0.35
     else:
         interpretation = f"Zone médiane ({position:.0%})"
         direction = None
