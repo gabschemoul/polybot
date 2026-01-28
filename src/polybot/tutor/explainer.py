@@ -91,14 +91,20 @@ En attendant, tu peux toujours:
         else:
             period = "Non spécifié"
 
+        # Calculate pnl_pct safely (handle accuracy-only simulations)
+        if simulation.initial_capital > 0:
+            pnl_pct = (simulation.final_capital - simulation.initial_capital) / simulation.initial_capital * 100
+        else:
+            pnl_pct = simulation.metrics.win_rate * 100  # Use accuracy
+
         # Format prompt
         prompt = EXPLAIN_RESULTS_PROMPT.format(
             strategy_name=simulation.strategy.name,
             approach=simulation.strategy.approach.value,
             period=period,
-            initial_capital=simulation.initial_capital,
-            final_capital=simulation.final_capital,
-            pnl_pct=(simulation.final_capital - simulation.initial_capital) / simulation.initial_capital * 100,
+            initial_capital=simulation.initial_capital or simulation.metrics.total_trades,
+            final_capital=simulation.final_capital or simulation.metrics.winning_trades,
+            pnl_pct=pnl_pct,
             total_trades=simulation.metrics.total_trades,
             winning_trades=simulation.metrics.winning_trades,
             losing_trades=simulation.metrics.losing_trades,

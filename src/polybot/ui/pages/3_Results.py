@@ -1,4 +1,4 @@
-"""Results analysis page with AI explanations."""
+"""Results analysis page - Prediction Accuracy focus."""
 
 import streamlit as st
 import pandas as pd
@@ -22,14 +22,13 @@ explainer = SimulationExplainer()
 simulations = sim_store.list_all()
 
 if not simulations:
-    st.info("📭 Aucune simulation disponible. Lance une simulation d'abord !")
-    st.page_link("pages/2_Simulate.py", label="Aller à Simulation", icon="🚀")
+    st.info("Aucune simulation disponible. Lance un backtest d'abord!")
+    st.page_link("pages/2_Simulate.py", label="Aller au Backtest", icon="🎯")
     st.stop()
 
 # Simulation selector
 st.markdown("### Sélectionne une Simulation")
 
-# Default to last simulation if available
 default_index = 0
 if "last_simulation_id" in st.session_state:
     for i, sim in enumerate(simulations):
@@ -37,10 +36,15 @@ if "last_simulation_id" in st.session_state:
             default_index = i
             break
 
-sim_options = [
-    f"{s['id']} | {s['strategy_name']} | {s['pnl']:+.2f}$ ({s['pnl_pct']:+.1f}%)"
-    for s in simulations
-]
+# Format options to show accuracy instead of P&L
+sim_options = []
+for s in simulations:
+    win_rate = s.get('win_rate', s.get('pnl_pct', 0))
+    if isinstance(win_rate, (int, float)):
+        win_rate_pct = win_rate * 100 if win_rate <= 1 else win_rate
+    else:
+        win_rate_pct = 50.0
+    sim_options.append(f"{s['id']} | {s['strategy_name']} | Accuracy: {win_rate_pct:.1f}%")
 
 selected_sim_str = st.selectbox(
     "Simulation:",
@@ -57,129 +61,165 @@ if not simulation:
 
 st.divider()
 
-# Summary metrics
-st.markdown("### 📈 Performance")
+# Summary metrics - Accuracy focused
+st.markdown("### 🎯 Prediction Accuracy")
 
 col1, col2, col3, col4, col5 = st.columns(5)
 
-pnl = simulation.final_capital - simulation.initial_capital
-pnl_pct = pnl / simulation.initial_capital * 100
+accuracy = simulation.metrics.win_rate
+correct = simulation.metrics.winning_trades
+total = simulation.metrics.total_trades
+wrong = simulation.metrics.losing_trades
 
 with col1:
+    delta_vs_random = (accuracy - 0.5) * 100
     st.metric(
-        "P&L Total",
-        f"${pnl:+,.2f}",
-        f"{pnl_pct:+.1f}%",
-        delta_color="normal" if pnl >= 0 else "inverse",
+        "Accuracy",
+        f"{accuracy*100:.1f}%",
+        f"{delta_vs_random:+.1f}% vs random",
+        delta_color="normal" if delta_vs_random >= 0 else "inverse",
     )
 
 with col2:
-    st.metric("Capital Final", f"${simulation.final_capital:,.2f}")
+    st.metric("Prédictions Correctes", correct)
 
 with col3:
-    st.metric("Trades", simulation.metrics.total_trades)
+    st.metric("Prédictions Totales", total)
 
 with col4:
-    st.metric("Win Rate", f"{simulation.metrics.win_rate*100:.1f}%")
+    st.metric("Prédictions Fausses", wrong)
 
 with col5:
-    st.metric("EV Moyenne", f"{simulation.metrics.avg_ev_expected*100:.1f}%")
+    st.metric("EV Moyenne Attendue", f"{simulation.metrics.avg_ev_expected*100:.1f}%")
 
 st.divider()
 
 # Charts
 st.markdown("### 📉 Visualisations")
 
-tab1, tab2, tab3 = st.tabs(["Évolution Capital", "Distribution Trades", "Détail Trades"])
+tab1, tab2, tab3 = st.tabs(["Accuracy Cumulative", "Distribution", "Détail Prédictions"])
 
 with tab1:
-    # Capital evolution over time
+    # Cumulative accuracy over time
     if simulation.trades:
-        capital_history = [simulation.initial_capital]
-        timestamps = [simulation.start_time]
+        correct_count = 0
+        total_count = 0
+        accuracy_history = []
+        timestamps = []
 
-        current_capital = simulation.initial_capital
         for trade in simulation.trades:
-            current_capital += trade.pnl
-            capital_history.append(current_capital)
+            total_count += 1
+            if trade.result == TradeResult.WIN:
+                correct_count += 1
+            accuracy_history.append(correct_count / total_count * 100)
             timestamps.append(trade.timestamp)
 
         fig = go.Figure()
+
+        # Accuracy line
         fig.add_trace(go.Scatter(
             x=timestamps,
-            y=capital_history,
-            mode='lines+markers',
-            name='Capital',
-            line=dict(color='blue' if pnl >= 0 else 'red'),
+            y=accuracy_history,
+            mode='lines',
+            name='Accuracy Cumulative',
+            line=dict(color='blue', width=2),
         ))
 
-        # Add baseline
+        # 50% baseline (random)
         fig.add_hline(
-            y=simulation.initial_capital,
+            y=50,
             line_dash="dash",
             line_color="gray",
-            annotation_text="Capital Initial"
+            annotation_text="Random (50%)"
         )
 
         fig.update_layout(
-            title="Évolution du Capital",
+            title="Évolution de l'Accuracy Cumulative",
             xaxis_title="Date",
-            yaxis_title="Capital ($)",
+            yaxis_title="Accuracy (%)",
             hovermode="x unified",
+            yaxis=dict(range=[0, 100]),
         )
 
         st.plotly_chart(fig, use_container_width=True)
+
+        # Interpretation
+        final_accuracy = accuracy_history[-1] if accuracy_history else 50
+        if final_accuracy > 55:
+            st.success(f"Ton accuracy finale de {final_accuracy:.1f}% est supérieure au hasard!")
+        elif final_accuracy > 48:
+            st.info(f"Ton accuracy finale de {final_accuracy:.1f}% est proche du hasard.")
+        else:
+            st.warning(f"Ton accuracy finale de {final_accuracy:.1f}% est inférieure au hasard.")
     else:
-        st.info("Aucun trade à afficher")
+        st.info("Aucune prédiction à afficher")
 
 with tab2:
     if simulation.trades:
         col1, col2 = st.columns(2)
 
         with col1:
-            # Win/Loss distribution
-            win_loss_data = {
-                "Résultat": ["Gagnants", "Perdants"],
-                "Nombre": [simulation.metrics.winning_trades, simulation.metrics.losing_trades],
+            # Correct/Wrong distribution
+            result_data = {
+                "Résultat": ["Correct", "Faux"],
+                "Nombre": [correct, wrong],
             }
             fig = px.pie(
-                win_loss_data,
+                result_data,
                 values="Nombre",
                 names="Résultat",
                 color="Résultat",
-                color_discrete_map={"Gagnants": "green", "Perdants": "red"},
-                title="Répartition Win/Loss",
+                color_discrete_map={"Correct": "green", "Faux": "red"},
+                title="Répartition Correct/Faux",
             )
             st.plotly_chart(fig, use_container_width=True)
 
         with col2:
             # Direction distribution
-            up_trades = len([t for t in simulation.trades if t.direction == TradeDirection.UP])
-            down_trades = len([t for t in simulation.trades if t.direction == TradeDirection.DOWN])
+            up_trades = [t for t in simulation.trades if t.direction == TradeDirection.UP]
+            down_trades = [t for t in simulation.trades if t.direction == TradeDirection.DOWN]
 
             dir_data = {
-                "Direction": ["UP 📈", "DOWN 📉"],
-                "Nombre": [up_trades, down_trades],
+                "Direction": ["UP", "DOWN"],
+                "Nombre": [len(up_trades), len(down_trades)],
             }
             fig = px.pie(
                 dir_data,
                 values="Nombre",
                 names="Direction",
                 color="Direction",
-                color_discrete_map={"UP 📈": "blue", "DOWN 📉": "orange"},
-                title="Répartition Direction",
+                color_discrete_map={"UP": "blue", "DOWN": "orange"},
+                title="Répartition des Prédictions",
             )
             st.plotly_chart(fig, use_container_width=True)
 
-        # P&L distribution
-        pnl_values = [t.pnl for t in simulation.trades]
-        fig = px.histogram(
-            x=pnl_values,
-            nbins=20,
-            title="Distribution des P&L par Trade",
-            labels={"x": "P&L ($)", "y": "Nombre de trades"},
+        # Accuracy by direction
+        st.markdown("#### Accuracy par Direction")
+
+        up_correct = len([t for t in up_trades if t.result == TradeResult.WIN])
+        down_correct = len([t for t in down_trades if t.result == TradeResult.WIN])
+
+        up_acc = up_correct / len(up_trades) * 100 if up_trades else 0
+        down_acc = down_correct / len(down_trades) * 100 if down_trades else 0
+
+        dir_acc_data = {
+            "Direction": ["UP", "DOWN"],
+            "Accuracy (%)": [up_acc, down_acc],
+            "Correct": [up_correct, down_correct],
+            "Total": [len(up_trades), len(down_trades)],
+        }
+
+        fig = px.bar(
+            dir_acc_data,
+            x="Direction",
+            y="Accuracy (%)",
+            color="Direction",
+            color_discrete_map={"UP": "blue", "DOWN": "orange"},
+            title="Accuracy par Direction",
+            text="Accuracy (%)",
         )
-        fig.add_vline(x=0, line_dash="dash", line_color="red")
+        fig.add_hline(y=50, line_dash="dash", line_color="gray", annotation_text="Random")
+        fig.update_traces(texttemplate='%{text:.1f}%', textposition='outside')
         st.plotly_chart(fig, use_container_width=True)
 
 with tab3:
@@ -188,14 +228,11 @@ with tab3:
         for t in simulation.trades:
             trade_data.append({
                 "Date": t.timestamp.strftime("%Y-%m-%d %H:%M"),
-                "Direction": "📈 UP" if t.direction == TradeDirection.UP else "📉 DOWN",
-                "Prix Entrée": f"{t.entry_price:.4f}",
-                "Probabilité": f"{t.model_probability*100:.1f}%",
-                "EV": f"{t.expected_value*100:+.1f}%",
+                "Prédiction": "UP" if t.direction == TradeDirection.UP else "DOWN",
+                "Probabilité Modèle": f"{t.model_probability*100:.1f}%",
+                "EV Attendue": f"{t.expected_value*100:+.1f}%",
                 "Confiance": f"{t.confidence*100:.0f}%",
-                "Position": f"${t.position_size:.2f}",
-                "Résultat": "✅" if t.result == TradeResult.WIN else "❌",
-                "P&L": f"${t.pnl:+.2f}",
+                "Résultat": "Correct" if t.result == TradeResult.WIN else "Faux",
             })
 
         df = pd.DataFrame(trade_data)
@@ -204,9 +241,9 @@ with tab3:
         # Download button
         csv = df.to_csv(index=False)
         st.download_button(
-            "📥 Télécharger CSV",
+            "Télécharger CSV",
             csv,
-            f"trades_{simulation.id}.csv",
+            f"predictions_{simulation.id}.csv",
             "text/csv",
         )
 
@@ -215,19 +252,17 @@ st.divider()
 # AI Explanation
 st.markdown("### 🤖 Analyse IA")
 
-# Check if we already have a valid explanation (not a fallback/error message)
 has_valid_explanation = simulation.ai_explanation and "API Claude n'est pas configurée" not in simulation.ai_explanation
 
 if has_valid_explanation:
     st.markdown(simulation.ai_explanation)
-    if st.button("🔄 Régénérer l'analyse", type="secondary"):
+    if st.button("Régénérer l'analyse", type="secondary"):
         st.rerun()
 else:
-    if st.button("🧠 Générer l'Analyse IA", type="primary"):
+    if st.button("Générer l'Analyse IA", type="primary"):
         with st.spinner("L'IA analyse tes résultats..."):
             try:
                 explanation = explainer.explain_simulation(simulation)
-                # Only save if it's a real explanation, not a fallback
                 if "API Claude n'est pas configurée" not in explanation:
                     simulation.ai_explanation = explanation
                     sim_store.save(simulation)
@@ -240,12 +275,12 @@ else:
 st.divider()
 st.markdown("### 💡 Extraction d'Insights")
 
-if st.button("🔍 Extraire des Insights"):
+if st.button("Extraire des Insights"):
     with st.spinner("Recherche de patterns..."):
         try:
             new_insights = explainer.generate_insights(simulation, insight_store)
             if new_insights:
-                st.success(f"✅ {len(new_insights)} nouveaux insights découverts !")
+                st.success(f"{len(new_insights)} nouveaux insights découverts!")
                 for insight in new_insights:
                     with st.expander(f"💡 {insight.title}"):
                         st.markdown(f"**Catégorie:** {insight.category}")
@@ -255,7 +290,7 @@ if st.button("🔍 Extraire des Insights"):
                             for exp in insight.suggested_experiments:
                                 st.markdown(f"- {exp}")
             else:
-                st.info("Pas de nouveaux insights pour cette simulation. Peut-être qu'ils existent déjà ou qu'il faut plus de données.")
+                st.info("Pas de nouveaux insights pour cette simulation.")
         except Exception as e:
             st.error(f"Erreur: {str(e)}")
             st.info("Configure ta clé API Anthropic pour activer l'extraction d'insights.")
@@ -269,14 +304,14 @@ with col1:
     st.markdown("""
     **Modifier la stratégie ?**
 
-    Retourne sur Configure pour ajuster les paramètres et relancer une simulation.
+    Retourne sur Configure pour ajuster les paramètres et relancer un backtest.
     """)
     st.page_link("pages/1_Configure.py", label="Modifier la Stratégie", icon="🔧")
 
 with col2:
     st.markdown("""
-    **Voir les connaissances accumulées ?**
+    **Tester en conditions réelles ?**
 
-    Consulte tous les insights découverts dans ta base de connaissances.
+    Lance le Paper Trading Live pour tester avec les vrais odds Polymarket.
     """)
-    st.page_link("pages/4_Knowledge.py", label="Base de Connaissances", icon="📚")
+    st.page_link("pages/6_Paper_Trading_Live.py", label="Paper Trading Live", icon="📈")

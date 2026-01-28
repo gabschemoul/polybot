@@ -212,3 +212,60 @@ class Simulation(BaseModel):
     ai_explanation: str = ""
     lessons_learned: list[str] = Field(default_factory=list)
     suggested_experiments: list[str] = Field(default_factory=list)
+
+
+# Paper Trading Models
+
+class PaperPosition(BaseModel):
+    """A paper trading position with real Polymarket odds."""
+
+    id: str
+    session_id: str
+    created_at: datetime
+
+    # Market info from Polymarket
+    market_id: str
+    market_question: str
+
+    # Entry details
+    direction: TradeDirection  # UP = bought YES, DOWN = bought NO
+    entry_odds: float  # Real odds from Polymarket (0-1)
+    entry_btc_price: float
+
+    # Position sizing
+    stake: float = 100.0  # Stake in $
+
+    # Signal data at entry
+    model_probability: float
+    expected_value: float
+    confidence: float
+    indicator_signals: list[IndicatorSignal] = Field(default_factory=list)
+
+    # Resolution
+    status: str = "open"  # open, resolved
+    resolution: str | None = None  # "YES" or "NO"
+    resolved_at: datetime | None = None
+
+    # P&L (calculated on resolution)
+    realized_pnl: float | None = None
+    realized_pnl_pct: float | None = None
+
+
+class PaperTradingSession(BaseModel):
+    """A paper trading session with real Polymarket data."""
+
+    id: str
+    created_at: datetime
+    strategy: StrategyConfig
+
+    # Session state
+    status: str = "active"  # active, completed
+
+    # Positions
+    positions: list[PaperPosition] = Field(default_factory=list)
+
+    # Summary metrics
+    total_positions: int = 0
+    resolved_positions: int = 0
+    winning_positions: int = 0
+    total_pnl: float = 0.0

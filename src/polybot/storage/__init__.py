@@ -36,4 +36,10 @@ def get_strategy_store():
     return StrategyStore()
 
 
-__all__ = ["get_simulation_store", "get_insight_store", "get_strategy_store"]
+def get_paper_trading_store():
+    """Get the paper trading store."""
+    from polybot.storage.paper_trading import PaperTradingStore
+    return PaperTradingStore()
+
+
+__all__ = ["get_simulation_store", "get_insight_store", "get_strategy_store", "get_paper_trading_store"]

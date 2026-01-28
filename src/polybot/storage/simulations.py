@@ -78,15 +78,24 @@ class SimulationStore:
                 with open(path, encoding="utf-8") as f:
                     data = json.load(f)
 
+                initial_cap = data["initial_capital"]
+                final_cap = data["final_capital"]
+
+                # Handle accuracy-only simulations (initial_capital = 0)
+                if initial_cap > 0:
+                    pnl_pct = (final_cap - initial_cap) / initial_cap * 100
+                else:
+                    pnl_pct = data["metrics"]["win_rate"] * 100  # Use win_rate as accuracy
+
                 summaries.append({
                     "id": data["id"],
                     "created_at": data["created_at"],
                     "strategy_name": data["strategy"]["name"],
                     "approach": data["strategy"]["approach"],
-                    "initial_capital": data["initial_capital"],
-                    "final_capital": data["final_capital"],
-                    "pnl": data["final_capital"] - data["initial_capital"],
-                    "pnl_pct": (data["final_capital"] - data["initial_capital"]) / data["initial_capital"] * 100,
+                    "initial_capital": initial_cap,
+                    "final_capital": final_cap,
+                    "pnl": final_cap - initial_cap,
+                    "pnl_pct": pnl_pct,
                     "total_trades": data["metrics"]["total_trades"],
                     "win_rate": data["metrics"]["win_rate"],
                 })
