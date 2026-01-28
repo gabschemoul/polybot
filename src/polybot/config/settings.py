@@ -33,7 +33,7 @@ class Settings(BaseSettings):
     polymarket_base_url: str = "https://clob.polymarket.com"
 
     # AI Tutor
-    ai_model: str = "claude-sonnet-4-20250514"
+    ai_model: str = "claude-opus-4-5-20251101"
     ai_max_tokens: int = 2048
 
     # Trading defaults
