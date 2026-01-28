@@ -20,6 +20,9 @@ explication pour t'aider à comprendre son impact.
 if "strategy_config" not in st.session_state:
     st.session_state.strategy_config = None
 
+# Use saved config as base if available
+saved_config = st.session_state.strategy_config
+
 st.divider()
 
 # Preset selection
@@ -29,19 +32,28 @@ st.markdown("Choisis une stratégie de base ou personnalise entièrement.")
 presets = list_presets()
 preset_options = ["Personnalisé"] + [p["name"] for p in presets]
 
+# Default to saved config name if it matches a preset
+default_preset_index = 0
+if saved_config:
+    for i, p in enumerate(presets):
+        if p["name"] == saved_config.name:
+            default_preset_index = i + 1
+            break
+
 selected_preset = st.selectbox(
     "Commencer avec:",
     preset_options,
+    index=default_preset_index,
     help="Les presets sont des configurations testées pour débuter. Tu peux les modifier ensuite."
 )
 
-# Load preset if selected
+# Load preset if selected, otherwise use saved config
 if selected_preset != "Personnalisé":
     preset_id = next(p["id"] for p in presets if p["name"] == selected_preset)
     preset_config, preset_desc = get_preset(preset_id)
     st.info(f"💡 {preset_desc}")
 else:
-    preset_config = None
+    preset_config = saved_config  # Use saved config as base
 
 st.divider()
 
@@ -58,9 +70,10 @@ with col1:
     }
 
     default_approach = "Mean Reversion"
-    if preset_config:
+    base_config = preset_config or saved_config
+    if base_config:
         for name, val in approach_options.items():
-            if val == preset_config.approach:
+            if val == base_config.approach:
                 default_approach = name
                 break
 
@@ -87,7 +100,8 @@ st.subheader("🎚️ Seuils de Décision")
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    default_ev = preset_config.min_ev * 100 if preset_config else 8.0
+    base_config = preset_config or saved_config
+    default_ev = base_config.min_ev * 100 if base_config else 8.0
     min_ev = st.slider(
         "EV Minimum (%)",
         min_value=3.0,
@@ -99,7 +113,7 @@ with col1:
     render_tooltip("min_ev")
 
 with col2:
-    default_conf = preset_config.min_confidence * 100 if preset_config else 65.0
+    default_conf = base_config.min_confidence * 100 if base_config else 65.0
     min_confidence = st.slider(
         "Confiance Minimum (%)",
         min_value=55.0,
@@ -111,7 +125,7 @@ with col2:
     render_tooltip("min_confidence")
 
 with col3:
-    default_pos = preset_config.max_position_pct * 100 if preset_config else 2.0
+    default_pos = base_config.max_position_pct * 100 if base_config else 2.0
     max_position = st.slider(
         "Position Max (%)",
         min_value=1.0,
@@ -137,9 +151,10 @@ with col1:
     }
 
     default_sizing = "Kelly Criterion (Recommandé)"
-    if preset_config and hasattr(preset_config, 'position_sizing'):
+    base_config = preset_config or saved_config
+    if base_config and hasattr(base_config, 'position_sizing'):
         for name, val in sizing_options.items():
-            if val == preset_config.position_sizing:
+            if val == base_config.position_sizing:
                 default_sizing = name
                 break
 
@@ -155,7 +170,11 @@ with col2:
     render_tooltip("position_sizing")
 
 # Martingale warning and base position
-martingale_base = 1.0
+default_martingale = 1.0
+if base_config and hasattr(base_config, 'martingale_base_pct'):
+    default_martingale = base_config.martingale_base_pct * 100
+
+martingale_base = default_martingale
 if selected_sizing == PositionSizing.MARTINGALE:
     st.warning("""
     ⚠️ **ATTENTION: La Martingale est extrêmement risquée !**
@@ -170,7 +189,7 @@ if selected_sizing == PositionSizing.MARTINGALE:
         "Position de base Martingale (%)",
         min_value=0.5,
         max_value=5.0,
-        value=1.0,
+        value=default_martingale,
         step=0.5,
         help="La mise initiale. Après chaque perte, elle est doublée."
     )
@@ -182,11 +201,12 @@ st.divider()
 st.subheader("📊 Indicateurs Techniques")
 st.markdown("Active les indicateurs que tu veux utiliser. Plus d'indicateurs = plus de filtrage mais moins de trades.")
 
-# Get default indicator settings from preset
+# Get default indicator settings from preset or saved config
 def get_preset_indicator(name: str) -> tuple[bool, dict]:
-    if not preset_config:
+    base_config = preset_config or saved_config
+    if not base_config:
         return name in ["rsi", "macd"], {}
-    for ind in preset_config.indicators:
+    for ind in base_config.indicators:
         if ind.name == name:
             return ind.enabled, ind.params
     return False, {}
@@ -240,7 +260,8 @@ st.divider()
 # Capital
 st.subheader("💰 Capital de Simulation")
 
-default_capital = preset_config.initial_capital if preset_config else 1000.0
+base_config = preset_config or saved_config
+default_capital = base_config.initial_capital if base_config else 1000.0
 initial_capital = st.number_input(
     "Capital initial ($)",
     min_value=100.0,
