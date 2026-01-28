@@ -17,6 +17,15 @@ st.markdown("""
         padding: 10px;
         border-radius: 5px;
     }
+    .stMetric label, .stMetric [data-testid="stMetricLabel"] {
+        color: #31333F !important;
+    }
+    .stMetric [data-testid="stMetricValue"] {
+        color: #0e1117 !important;
+    }
+    .stMetric [data-testid="stMetricDelta"] {
+        color: #31333F !important;
+    }
     .tooltip {
         position: relative;
         display: inline-block;
