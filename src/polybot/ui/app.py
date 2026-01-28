@@ -96,11 +96,11 @@ def main():
     st.divider()
 
     # Quick stats if we have data
-    from polybot.storage import SimulationStore, InsightStore
+    from polybot.storage import get_simulation_store, get_insight_store
 
     try:
-        sim_store = SimulationStore()
-        insight_store = InsightStore()
+        sim_store = get_simulation_store()
+        insight_store = get_insight_store()
 
         sim_stats = sim_store.get_stats()
         insight_stats = insight_store.get_stats()

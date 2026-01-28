@@ -16,7 +16,7 @@ from polybot.brain.indicators import calculate_indicators
 from polybot.brain.ev_calculator import generate_signal
 from polybot.data.binance import BinanceClient
 from polybot.data.polymarket import MockPolymarketClient
-from polybot.storage.simulations import SimulationStore
+from polybot.storage import get_simulation_store
 
 st.set_page_config(page_title="Simulate - PolyBot", page_icon="🚀", layout="wide")
 
@@ -102,7 +102,7 @@ if st.button("🚀 Lancer la Simulation", type="primary", use_container_width=Tr
         polymarket = MockPolymarketClient()
 
         # Initialize simulation
-        sim_store = SimulationStore()
+        sim_store = get_simulation_store()
         sim_id = sim_store.generate_id()
 
         trades: list[Trade] = []

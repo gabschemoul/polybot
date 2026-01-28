@@ -14,6 +14,15 @@ class Settings(BaseSettings):
     anthropic_api_key: str = Field(default="", description="Anthropic API key for AI Tutor")
     polymarket_api_key: str = Field(default="", description="Polymarket API key (optional)")
 
+    # Supabase (for cloud storage)
+    supabase_url: str = Field(default="", description="Supabase project URL")
+    supabase_key: str = Field(default="", description="Supabase anon/public key")
+
+    @property
+    def use_supabase(self) -> bool:
+        """Check if Supabase is configured."""
+        return bool(self.supabase_url and self.supabase_key)
+
     # Paths
     data_dir: Path = Field(default=Path("./data"), description="Data storage directory")
 

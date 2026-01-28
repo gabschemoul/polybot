@@ -3,8 +3,7 @@
 import streamlit as st
 import pandas as pd
 
-from polybot.storage.knowledge import InsightStore
-from polybot.storage.simulations import SimulationStore
+from polybot.storage import get_simulation_store, get_insight_store
 
 st.set_page_config(page_title="Connaissances - PolyBot", page_icon="📚", layout="wide")
 
@@ -16,8 +15,8 @@ Plus tu expérimentes, plus elle s'enrichit !
 """)
 
 # Load stores
-insight_store = InsightStore()
-sim_store = SimulationStore()
+insight_store = get_insight_store()
+sim_store = get_simulation_store()
 
 # Stats
 stats = insight_store.get_stats()

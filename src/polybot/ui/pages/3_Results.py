@@ -6,8 +6,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 from polybot.brain.models import TradeDirection, TradeResult
-from polybot.storage.simulations import SimulationStore
-from polybot.storage.knowledge import InsightStore
+from polybot.storage import get_simulation_store, get_insight_store
 from polybot.tutor.explainer import SimulationExplainer
 
 st.set_page_config(page_title="Résultats - PolyBot", page_icon="📊", layout="wide")
@@ -15,8 +14,8 @@ st.set_page_config(page_title="Résultats - PolyBot", page_icon="📊", layout="
 st.title("📊 Analyse des Résultats")
 
 # Load simulations
-sim_store = SimulationStore()
-insight_store = InsightStore()
+sim_store = get_simulation_store()
+insight_store = get_insight_store()
 explainer = SimulationExplainer()
 
 # Get simulation list
