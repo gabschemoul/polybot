@@ -5,15 +5,22 @@ from datetime import datetime, timezone
 from pathlib import Path
 from uuid import uuid4
 
-from polybot.brain.models import SavedStrategy, StrategyConfig
-from polybot.config.settings import get_settings
+
+def _get_settings():
+    from polybot.config.settings import get_settings
+    return get_settings()
+
+
+def _get_models():
+    from polybot.brain.models import SavedStrategy, StrategyConfig
+    return SavedStrategy, StrategyConfig
 
 
 class StrategyStore:
     """Store and retrieve saved strategies with performance tracking."""
 
     def __init__(self, storage_dir: Path | None = None):
-        settings = get_settings()
+        settings = _get_settings()
         self.storage_dir = storage_dir or (settings.data_dir / "strategies")
         self.storage_dir.mkdir(parents=True, exist_ok=True)
 
@@ -25,7 +32,7 @@ class StrategyStore:
         short_uuid = uuid4().hex[:8]
         return f"STRAT-{short_uuid}"
 
-    def save(self, strategy: SavedStrategy) -> str:
+    def save(self, strategy) -> str:
         """Save a strategy."""
         path = self._get_path(strategy.id)
         data = strategy.model_dump(mode="json")
@@ -35,7 +42,7 @@ class StrategyStore:
 
         return strategy.id
 
-    def load(self, strategy_id: str) -> SavedStrategy | None:
+    def load(self, strategy_id: str):
         """Load a strategy by ID."""
         path = self._get_path(strategy_id)
         if not path.exists():
@@ -44,10 +51,12 @@ class StrategyStore:
         with open(path, encoding="utf-8") as f:
             data = json.load(f)
 
+        SavedStrategy, _ = _get_models()
         return SavedStrategy.model_validate(data)
 
-    def list_all(self) -> list[SavedStrategy]:
+    def list_all(self) -> list:
         """List all saved strategies."""
+        SavedStrategy, _ = _get_models()
         strategies = []
 
         for path in self.storage_dir.glob("STRAT-*.json"):
@@ -130,11 +139,12 @@ class StrategyStore:
 
     def create_from_config(
         self,
-        config: StrategyConfig,
+        config,
         name: str,
         author: str = "",
-    ) -> SavedStrategy:
+    ):
         """Create a new saved strategy from a config."""
+        SavedStrategy, _ = _get_models()
         strategy = SavedStrategy(
             id=self.generate_id(),
             name=name,
