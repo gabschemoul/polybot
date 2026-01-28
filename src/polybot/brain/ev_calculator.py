@@ -242,8 +242,8 @@ def generate_signal(
     confidence = calculate_confidence(indicator_signals, model_probability)
 
     # Determine if we should trade
-    # MUST have a signal from indicators + meet EV and confidence thresholds
-    should_trade = has_signal and ev >= config.min_ev and confidence >= config.min_confidence
+    # Trade when we have a signal and positive EV (simplified - removed confidence requirement)
+    should_trade = has_signal and ev > 0
 
     # Calculate position size if trading
     position_size = 0.0
