@@ -223,24 +223,25 @@ if st.button("🚀 Lancer la Simulation", type="primary", use_container_width=Tr
                     future_price = df.iloc[i + window_size - 1]["close"]
                     price_change_pct = (future_price - btc_price) / btc_price * 100
 
-                    # REALISTIC: Price must move by at least 0.05% to count as clear direction
-                    # Smaller moves = coin flip (market noise)
+                    # Determine if price went up or down
                     import random
-                    min_move = 0.05  # 0.05% minimum move to count as directional
+                    price_went_up = future_price > btc_price
 
-                    if abs(price_change_pct) < min_move:
-                        # Price barely moved - random outcome (like real market noise)
-                        won = random.random() < 0.5
+                    if signal.direction == TradeDirection.UP:
+                        won = price_went_up
                     else:
-                        price_went_up = price_change_pct > 0
-                        if signal.direction == TradeDirection.UP:
-                            won = price_went_up
-                        else:
-                            won = not price_went_up
+                        won = not price_went_up
 
-                    # REALISTIC: 5% chance of bad execution (order filled at wrong time, etc)
-                    if random.random() < 0.05:
-                        won = not won  # Execution error flips the result
+                    # REALITY CHECK: Backtests overestimate edge. In real markets:
+                    # - Market is efficient, your "edge" is mostly luck
+                    # - Execution timing is never perfect
+                    # - Other traders see same signals
+                    # - Psychological errors
+                    #
+                    # Apply 15% "reality tax" - your prediction randomly fails
+                    # This brings theoretical 57% win rate down to ~50-52%
+                    if random.random() < 0.15:
+                        won = not won
 
                     # Calculate position size based on method
                     position = calculate_position_size(signal.position_size, capital)
