@@ -41,33 +41,31 @@ def combine_indicator_signals(
         # All relevant indicators neutral - NO TRADE
         return 0.5, TradeDirection.UP, "Indicateurs neutres - pas de signal clair", False
 
-    # Count votes for each direction, weighted by strength
-    up_score = sum(
-        s.strength for s in directional_signals if s.direction_bias == TradeDirection.UP
-    )
-    down_score = sum(
-        s.strength for s in directional_signals if s.direction_bias == TradeDirection.DOWN
-    )
+    # Count votes equally (1 vote per indicator, not weighted by strength)
+    # This prevents correlated indicators (RSI + Bollinger) from dominating
+    up_votes = [s for s in directional_signals if s.direction_bias == TradeDirection.UP]
+    down_votes = [s for s in directional_signals if s.direction_bias == TradeDirection.DOWN]
 
-    total_score = up_score + down_score
-    if total_score == 0:
-        # No strength in signals - NO TRADE
-        return 0.5, TradeDirection.UP, "Signaux sans force", False
+    up_count = len(up_votes)
+    down_count = len(down_votes)
 
-    # Determine direction and raw probability based on INDICATORS
-    if up_score > down_score:
+    # Tie = no clear signal, don't trade
+    if up_count == down_count:
+        return 0.5, TradeDirection.UP, "Indicateurs divisés - pas de consensus", False
+
+    # Determine direction based on vote count
+    if up_count > down_count:
         direction = TradeDirection.UP
-        raw_prob = up_score / total_score
-        winning_signals = [s for s in directional_signals if s.direction_bias == TradeDirection.UP]
+        winning_signals = up_votes
+        raw_prob = up_count / (up_count + down_count)
     else:
         direction = TradeDirection.DOWN
-        raw_prob = down_score / total_score
-        winning_signals = [s for s in directional_signals if s.direction_bias == TradeDirection.DOWN]
+        winning_signals = down_votes
+        raw_prob = down_count / (up_count + down_count)
 
-    # Apply strength boost based on signal agreement
-    if len(winning_signals) > 1:
-        # Multiple indicators agree - boost confidence
-        raw_prob = min(0.95, raw_prob + 0.05 * len(winning_signals))
+    # Boost probability based on agreement strength (average strength of winners)
+    avg_strength = sum(s.strength for s in winning_signals) / len(winning_signals)
+    raw_prob = min(0.95, raw_prob + avg_strength * 0.1)
 
     # Scale to realistic probability range (0.45 - 0.75 for crypto short-term)
     # No model should claim >75% accuracy on 15-min crypto movements
