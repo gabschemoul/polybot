@@ -5,6 +5,7 @@ from datetime import datetime, timezone, timedelta
 import pandas as pd
 
 from polybot.brain.models import (
+    PositionSizing,
     Simulation,
     SimulationMetrics,
     StrategyConfig,
@@ -32,7 +33,7 @@ config: StrategyConfig = st.session_state.strategy_config
 
 # Show current config summary
 st.markdown("### Configuration Active")
-col1, col2, col3, col4 = st.columns(4)
+col1, col2, col3, col4, col5 = st.columns(5)
 with col1:
     st.metric("Stratégie", config.name[:20])
 with col2:
@@ -40,7 +41,18 @@ with col2:
 with col3:
     st.metric("EV Min", f"{config.min_ev*100:.0f}%")
 with col4:
+    sizing_labels = {
+        PositionSizing.KELLY: "Kelly",
+        PositionSizing.FIXED: "Fixe",
+        PositionSizing.MARTINGALE: "Martingale",
+    }
+    st.metric("Position", sizing_labels.get(config.position_sizing, "Kelly"))
+with col5:
     st.metric("Capital", f"${config.initial_capital:,.0f}")
+
+# Martingale warning
+if config.position_sizing == PositionSizing.MARTINGALE:
+    st.warning("⚠️ **Mode Martingale actif** — Cette simulation va démontrer pourquoi la martingale est dangereuse. Observe le comportement du capital !")
 
 st.divider()
 
@@ -109,6 +121,31 @@ if st.button("🚀 Lancer la Simulation", type="primary", use_container_width=Tr
         capital = config.initial_capital
         trade_count = 0
 
+        # Martingale state
+        consecutive_losses = 0
+        martingale_multiplier = 1
+        max_consecutive_losses = 0
+        max_position_used = 0.0
+
+        def calculate_position_size(signal_size: float, current_capital: float) -> float:
+            """Calculate position size based on strategy method."""
+            if config.position_sizing == PositionSizing.KELLY:
+                # Kelly: use signal's suggested size, capped by max_position_pct
+                return min(signal_size, current_capital * config.max_position_pct)
+
+            elif config.position_sizing == PositionSizing.FIXED:
+                # Fixed: always use max_position_pct
+                return current_capital * config.max_position_pct
+
+            elif config.position_sizing == PositionSizing.MARTINGALE:
+                # Martingale: base * 2^consecutive_losses
+                base_position = current_capital * config.martingale_base_pct
+                position = base_position * martingale_multiplier
+                # Cap at remaining capital
+                return min(position, current_capital * 0.9)  # Never bet more than 90%
+
+            return signal_size
+
         # Process data in 15-minute windows
         window_size = 15 if interval == "1m" else (3 if interval == "5m" else 1)
         total_windows = len(df) // window_size
@@ -154,8 +191,9 @@ if st.button("🚀 Lancer la Simulation", type="primary", use_container_width=Tr
                     else:
                         won = not price_went_up
 
-                    # Calculate P&L
-                    position = min(signal.position_size, capital * config.max_position_pct)
+                    # Calculate position size based on method
+                    position = calculate_position_size(signal.position_size, capital)
+                    max_position_used = max(max_position_used, position)
 
                     if won:
                         pnl = position * (1 - market_price) / market_price
@@ -166,6 +204,15 @@ if st.button("🚀 Lancer la Simulation", type="primary", use_container_width=Tr
 
                     capital += pnl
                     trade_count += 1
+
+                    # Update martingale state
+                    if won:
+                        consecutive_losses = 0
+                        martingale_multiplier = 1
+                    else:
+                        consecutive_losses += 1
+                        max_consecutive_losses = max(max_consecutive_losses, consecutive_losses)
+                        martingale_multiplier = 2 ** consecutive_losses
 
                     # Record trade
                     trade = Trade(
@@ -210,6 +257,8 @@ if st.button("🚀 Lancer la Simulation", type="primary", use_container_width=Tr
             total_pnl_pct=(capital - config.initial_capital) / config.initial_capital,
             avg_ev_expected=sum(t.expected_value for t in trades) / len(trades) if trades else 0,
             avg_ev_realized=(capital - config.initial_capital) / config.initial_capital / len(trades) if trades else 0,
+            max_consecutive_losses=max_consecutive_losses,
+            max_position_used=max_position_used,
         )
 
         # Step 5: Create and save simulation
@@ -258,19 +307,54 @@ if st.button("🚀 Lancer la Simulation", type="primary", use_container_width=Tr
         with col4:
             st.metric("Capital Final", f"${capital:,.2f}")
 
+        # Martingale specific metrics
+        if config.position_sizing == PositionSizing.MARTINGALE:
+            st.markdown("### ⚠️ Analyse Martingale")
+            mcol1, mcol2, mcol3 = st.columns(3)
+
+            with mcol1:
+                st.metric("Pertes Consécutives Max", metrics.max_consecutive_losses)
+            with mcol2:
+                max_pos_pct = (metrics.max_position_used / config.initial_capital) * 100
+                st.metric("Position Max Utilisée", f"${metrics.max_position_used:.2f}", f"{max_pos_pct:.1f}%")
+            with mcol3:
+                # What would happen with one more loss
+                next_position = config.initial_capital * config.martingale_base_pct * (2 ** (metrics.max_consecutive_losses + 1))
+                st.metric("Prochaine Position si Perte", f"${next_position:.2f}")
+
+            if metrics.max_consecutive_losses >= 4:
+                st.error(f"""
+                🚨 **Danger démontré !** Tu as eu {metrics.max_consecutive_losses} pertes consécutives.
+
+                Avec une base de {config.martingale_base_pct*100:.1f}%, la position a grimpé jusqu'à
+                ${metrics.max_position_used:.2f} ({max_pos_pct:.1f}% du capital).
+
+                **Leçon**: Une série de 6-7 pertes (statistiquement probable sur le long terme)
+                peut vider complètement ton capital !
+                """)
+            elif metrics.total_pnl < 0:
+                st.warning("""
+                📉 La martingale n'a pas réussi à récupérer les pertes dans cette simulation.
+                Imagine ce qui se passe sur une période plus longue...
+                """)
+
         # Quick trade list
         if trades:
             st.markdown("### 📝 Derniers Trades")
 
             trade_data = []
             for t in trades[-10:]:
-                trade_data.append({
+                row = {
                     "Date": t.timestamp.strftime("%Y-%m-%d %H:%M"),
                     "Direction": "📈 UP" if t.direction == TradeDirection.UP else "📉 DOWN",
                     "EV Attendue": f"{t.expected_value*100:.1f}%",
                     "Résultat": "✅ Win" if t.result == TradeResult.WIN else "❌ Loss",
                     "P&L": f"${t.pnl:+.2f}",
-                })
+                }
+                # Add position size for martingale to show escalation
+                if config.position_sizing == PositionSizing.MARTINGALE:
+                    row["Position"] = f"${t.position_size:.2f}"
+                trade_data.append(row)
 
             st.dataframe(pd.DataFrame(trade_data), use_container_width=True, hide_index=True)
 

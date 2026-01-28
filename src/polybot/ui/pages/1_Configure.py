@@ -2,7 +2,7 @@
 
 import streamlit as st
 
-from polybot.brain.models import IndicatorConfig, StrategyApproach, StrategyConfig
+from polybot.brain.models import IndicatorConfig, PositionSizing, StrategyApproach, StrategyConfig
 from polybot.config.presets import list_presets, get_preset
 from polybot.tutor.prompts import TOOLTIPS
 from polybot.ui.components.tooltips import render_tooltip, render_strategy_explanation
@@ -124,6 +124,60 @@ with col3:
 
 st.divider()
 
+# Position Sizing Method
+st.subheader("📐 Méthode de Position Sizing")
+
+col1, col2 = st.columns([2, 1])
+
+with col1:
+    sizing_options = {
+        "Kelly Criterion (Recommandé)": PositionSizing.KELLY,
+        "Fixe": PositionSizing.FIXED,
+        "Martingale (Dangereux!)": PositionSizing.MARTINGALE,
+    }
+
+    default_sizing = "Kelly Criterion (Recommandé)"
+    if preset_config and hasattr(preset_config, 'position_sizing'):
+        for name, val in sizing_options.items():
+            if val == preset_config.position_sizing:
+                default_sizing = name
+                break
+
+    selected_sizing_name = st.radio(
+        "Comment calculer la taille des positions ?",
+        list(sizing_options.keys()),
+        index=list(sizing_options.keys()).index(default_sizing),
+        horizontal=True,
+    )
+    selected_sizing = sizing_options[selected_sizing_name]
+
+with col2:
+    render_tooltip("position_sizing")
+
+# Martingale warning and base position
+martingale_base = 1.0
+if selected_sizing == PositionSizing.MARTINGALE:
+    st.warning("""
+    ⚠️ **ATTENTION: La Martingale est extrêmement risquée !**
+
+    Cette méthode double ta mise après chaque perte. Une série de 6 pertes
+    consécutives avec une base de 1% nécessite 64% de ton capital sur un seul trade !
+
+    **Utilise uniquement pour comprendre pourquoi cette stratégie échoue.**
+    """)
+
+    martingale_base = st.slider(
+        "Position de base Martingale (%)",
+        min_value=0.5,
+        max_value=5.0,
+        value=1.0,
+        step=0.5,
+        help="La mise initiale. Après chaque perte, elle est doublée."
+    )
+    render_tooltip("martingale")
+
+st.divider()
+
 # Indicators
 st.subheader("📊 Indicateurs Techniques")
 st.markdown("Active les indicateurs que tu veux utiliser. Plus d'indicateurs = plus de filtrage mais moins de trades.")
@@ -217,6 +271,8 @@ strategy_config = StrategyConfig(
     indicators=indicators,
     initial_capital=initial_capital,
     max_position_pct=max_position / 100,
+    position_sizing=selected_sizing,
+    martingale_base_pct=martingale_base / 100,
 )
 
 # Summary
@@ -234,6 +290,17 @@ with col2:
 
 with col3:
     st.metric("Capital", f"${initial_capital:,.0f}")
+    sizing_display = {
+        PositionSizing.KELLY: "Kelly",
+        PositionSizing.FIXED: "Fixe",
+        PositionSizing.MARTINGALE: "Martingale ⚠️",
+    }
+    st.metric("Position Sizing", sizing_display[selected_sizing])
+
+# Additional row for indicators
+st.markdown("")  # spacer
+col1, col2, col3 = st.columns(3)
+with col1:
     active_indicators = [i.name.upper() for i in indicators]
     st.metric("Indicateurs", ", ".join(active_indicators) or "Aucun")
 

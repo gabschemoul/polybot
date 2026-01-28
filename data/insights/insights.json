@@ -1,0 +1,78 @@
+[
+  {
+    "id": "INS-123f39f3",
+    "discovered_at": "2026-01-28T18:08:44.426139",
+    "category": "indicator",
+    "title": "MACD haussier efficace malgr\u00e9 RSI neutre",
+    "description": "Les signaux MACD haussiers (momentum positif ou croisement r\u00e9cent) g\u00e9n\u00e8rent un taux de r\u00e9ussite de 65% m\u00eame quand le RSI reste en zone neutre. Cette combinaison semble particuli\u00e8rement robuste.",
+    "evidence_simulation_ids": [
+      "SIM-20260128-180516-a2a3ec"
+    ],
+    "sample_size": 50,
+    "confidence": 0.8,
+    "metrics": {},
+    "tags": [
+      "macd",
+      "rsi",
+      "momentum",
+      "zone-neutre",
+      "combinaison-indicateurs"
+    ],
+    "suggested_experiments": [
+      "Tester une strat\u00e9gie focalis\u00e9e uniquement sur MACD haussier + RSI neutre",
+      "Analyser la performance selon l'intensit\u00e9 du signal MACD"
+    ],
+    "validated": false,
+    "validation_count": 0
+  },
+  {
+    "id": "INS-7c0f363a",
+    "discovered_at": "2026-01-28T18:08:44.427039",
+    "category": "timing",
+    "title": "Conditions extr\u00eames Bollinger favorisent les gains importants",
+    "description": "Les trades en conditions Bollinger extr\u00eames (bande basse -56%, -16%) g\u00e9n\u00e8rent des gains sup\u00e9rieurs \u00e0 1.5% m\u00eame avec des prix d'entr\u00e9e \u00e9lev\u00e9s. Les signaux de retournement sont particuli\u00e8rement payants.",
+    "evidence_simulation_ids": [
+      "SIM-20260128-180516-a2a3ec"
+    ],
+    "sample_size": 50,
+    "confidence": 0.75,
+    "metrics": {},
+    "tags": [
+      "bollinger",
+      "conditions-extremes",
+      "retournement",
+      "gains-eleves"
+    ],
+    "suggested_experiments": [
+      "Cr\u00e9er une strat\u00e9gie sp\u00e9cialis\u00e9e sur les conditions Bollinger extr\u00eames",
+      "Comparer la performance selon le niveau d'extr\u00e9mit\u00e9 (-20%, -40%, -60%)"
+    ],
+    "validated": false,
+    "validation_count": 0
+  },
+  {
+    "id": "INS-18e44a60",
+    "discovered_at": "2026-01-28T18:08:44.428608",
+    "category": "risk",
+    "title": "R\u00e9silience face aux s\u00e9ries de pertes cons\u00e9cutives",
+    "description": "La strat\u00e9gie montre une bonne r\u00e9sistance aux s\u00e9ries de 3-4 pertes cons\u00e9cutives, maintenant le capital et retrouvant rapidement la profitabilit\u00e9. Aucun drawdown maximal observ\u00e9 sur 14 jours.",
+    "evidence_simulation_ids": [
+      "SIM-20260128-180516-a2a3ec"
+    ],
+    "sample_size": 50,
+    "confidence": 0.7,
+    "metrics": {},
+    "tags": [
+      "drawdown",
+      "resilience",
+      "series-pertes",
+      "gestion-risque"
+    ],
+    "suggested_experiments": [
+      "Tester sur des p\u00e9riodes de forte volatilit\u00e9",
+      "Analyser le comportement lors de tendances baissi\u00e8res prolong\u00e9es"
+    ],
+    "validated": false,
+    "validation_count": 0
+  }
+]

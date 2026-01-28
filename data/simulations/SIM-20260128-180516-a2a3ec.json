@@ -1,0 +1,2111 @@
+{
+  "id": "SIM-20260128-180516-a2a3ec",
+  "created_at": "2026-01-28T17:05:18.827001Z",
+  "strategy": {
+    "name": "Balanced Momentum",
+    "approach": "auto",
+    "min_ev": 0.08,
+    "min_confidence": 0.65,
+    "indicators": [
+      {
+        "name": "rsi",
+        "enabled": true,
+        "params": {
+          "period": 14
+        }
+      },
+      {
+        "name": "macd",
+        "enabled": true,
+        "params": {
+          "fast": 12,
+          "slow": 26,
+          "signal": 9
+        }
+      },
+      {
+        "name": "bollinger",
+        "enabled": true,
+        "params": {
+          "period": 20,
+          "std": 2.0
+        }
+      }
+    ],
+    "initial_capital": 1000.0,
+    "max_position_pct": 0.02
+  },
+  "start_time": "2026-01-14T00:00:00Z",
+  "end_time": "2026-01-28T17:05:00Z",
+  "initial_capital": 1000.0,
+  "final_capital": 1195.021969448467,
+  "trades": [
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0001",
+      "timestamp": "2026-01-14T06:14:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-24",
+      "market_name": "Will BTC be higher than $94,863 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.5892567708996388,
+      "exit_price": 0.0,
+      "model_probability": 0.75,
+      "expected_value": 0.1607,
+      "confidence": 0.6588,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "loss",
+      "pnl": -20.0,
+      "pnl_pct": -1.0,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 43.98,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 5.932437,
+          "interpretation": "Momentum haussier (croisement r\u00e9cent!)",
+          "direction_bias": "up",
+          "strength": 0.3625367824970818
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.404,
+          "interpretation": "Zone m\u00e9diane (40%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0002",
+      "timestamp": "2026-01-14T13:59:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-55",
+      "market_name": "Will BTC be higher than $94,998 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.38705868817214806,
+      "exit_price": 1.0,
+      "model_probability": 0.75,
+      "expected_value": 0.3629,
+      "confidence": 0.6553,
+      "position_size": 19.6,
+      "position_pct": 0.019600000000000003,
+      "result": "win",
+      "pnl": 31.038315580924806,
+      "pnl_pct": 1.5835875296390205,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 49.11,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 4.860491,
+          "interpretation": "Momentum haussier (croisement r\u00e9cent!)",
+          "direction_bias": "up",
+          "strength": 0.35116403339288677
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.517,
+          "interpretation": "Zone m\u00e9diane (52%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0003",
+      "timestamp": "2026-01-14T17:44:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-70",
+      "market_name": "Will BTC be higher than $97,175 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.36722094104961656,
+      "exit_price": 0.0,
+      "model_probability": 0.75,
+      "expected_value": 0.3828,
+      "confidence": 0.6624,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "loss",
+      "pnl": -20.0,
+      "pnl_pct": -1.0,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 44.07,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 7.258894,
+          "interpretation": "Momentum haussier (croisement r\u00e9cent!)",
+          "direction_bias": "up",
+          "strength": 0.3746994563876836
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.427,
+          "interpretation": "Zone m\u00e9diane (43%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0004",
+      "timestamp": "2026-01-14T18:59:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-75",
+      "market_name": "Will BTC be higher than $96,807 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.5568262350838638,
+      "exit_price": 1.0,
+      "model_probability": 0.75,
+      "expected_value": 0.1932,
+      "confidence": 0.6626,
+      "position_size": 19.8207663116185,
+      "position_pct": 0.0198207663116185,
+      "result": "win",
+      "pnl": 15.775197137613176,
+      "pnl_pct": 0.7958923933413261,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 57.17,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 36.324306,
+          "interpretation": "Momentum haussier",
+          "direction_bias": "up",
+          "strength": 0.37522570921192655
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.718,
+          "interpretation": "Zone m\u00e9diane (72%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0005",
+      "timestamp": "2026-01-15T00:44:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-98",
+      "market_name": "Will BTC be higher than $96,596 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.5622572303689017,
+      "exit_price": 1.0,
+      "model_probability": 0.75,
+      "expected_value": 0.1877,
+      "confidence": 0.6633,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "win",
+      "pnl": 15.570907619770102,
+      "pnl_pct": 0.7785453809885051,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 40.09,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 7.491069,
+          "interpretation": "Momentum haussier (croisement r\u00e9cent!)",
+          "direction_bias": "up",
+          "strength": 0.37755016661964297
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.389,
+          "interpretation": "Zone m\u00e9diane (39%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0006",
+      "timestamp": "2026-01-15T14:59:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-155",
+      "market_name": "Will BTC be higher than $96,063 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.5777903959406088,
+      "exit_price": 1.0,
+      "model_probability": 0.75,
+      "expected_value": 0.1722,
+      "confidence": 0.6746,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "win",
+      "pnl": 14.614628662079399,
+      "pnl_pct": 0.7307314331039699,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 43.56,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 39.908464,
+          "interpretation": "Momentum haussier",
+          "direction_bias": "up",
+          "strength": 0.41543866903787074
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.555,
+          "interpretation": "Zone m\u00e9diane (55%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0007",
+      "timestamp": "2026-01-15T15:44:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-158",
+      "market_name": "Will BTC be higher than $95,881 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.4249053119795246,
+      "exit_price": 1.0,
+      "model_probability": 0.75,
+      "expected_value": 0.3251,
+      "confidence": 0.6704,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "win",
+      "pnl": 27.06931035252335,
+      "pnl_pct": 1.3534655176261674,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 46.79,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 9.71925,
+          "interpretation": "Momentum haussier (croisement r\u00e9cent!)",
+          "direction_bias": "up",
+          "strength": 0.40136817331309677
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.511,
+          "interpretation": "Zone m\u00e9diane (51%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0008",
+      "timestamp": "2026-01-15T18:44:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-170",
+      "market_name": "Will BTC be higher than $96,022 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.4665851180229588,
+      "exit_price": 0.0,
+      "model_probability": 0.75,
+      "expected_value": 0.2834,
+      "confidence": 0.6739,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "loss",
+      "pnl": -20.0,
+      "pnl_pct": -1.0,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 45.19,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 10.84104,
+          "interpretation": "Momentum haussier (croisement r\u00e9cent!)",
+          "direction_bias": "up",
+          "strength": 0.4129010820398902
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.455,
+          "interpretation": "Zone m\u00e9diane (46%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0009",
+      "timestamp": "2026-01-15T19:44:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-174",
+      "market_name": "Will BTC be higher than $95,408 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.62314166289486,
+      "exit_price": 1.0,
+      "model_probability": 0.75,
+      "expected_value": 0.1269,
+      "confidence": 0.6519,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "win",
+      "pnl": 12.095430607364984,
+      "pnl_pct": 0.6047715303682492,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 41.7,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 3.771729,
+          "interpretation": "Momentum haussier (croisement r\u00e9cent!)",
+          "direction_bias": "up",
+          "strength": 0.33953262907360593
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.37,
+          "interpretation": "Zone m\u00e9diane (37%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0010",
+      "timestamp": "2026-01-16T04:59:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-211",
+      "market_name": "Will BTC be higher than $95,261 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.43318781119970196,
+      "exit_price": 1.0,
+      "model_probability": 0.75,
+      "expected_value": 0.3168,
+      "confidence": 0.666,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "win",
+      "pnl": 26.169350759455906,
+      "pnl_pct": 1.3084675379727952,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 52.09,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 8.262799,
+          "interpretation": "Momentum haussier (croisement r\u00e9cent!)",
+          "direction_bias": "up",
+          "strength": 0.3867382649199968
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.761,
+          "interpretation": "Zone m\u00e9diane (76%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0011",
+      "timestamp": "2026-01-16T15:59:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-255",
+      "market_name": "Will BTC be higher than $94,586 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.49391927016131737,
+      "exit_price": 1.0,
+      "model_probability": 0.75,
+      "expected_value": 0.2561,
+      "confidence": 0.6772,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "win",
+      "pnl": 20.492447264646845,
+      "pnl_pct": 1.0246223632323423,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 47.6,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 40.108613,
+          "interpretation": "Momentum haussier",
+          "direction_bias": "up",
+          "strength": 0.424043953103075
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.661,
+          "interpretation": "Zone m\u00e9diane (66%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0012",
+      "timestamp": "2026-01-18T02:44:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-394",
+      "market_name": "Will BTC be higher than $94,964 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.6336450146188248,
+      "exit_price": 1.0,
+      "model_probability": 0.75,
+      "expected_value": 0.1164,
+      "confidence": 0.6504,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "win",
+      "pnl": 11.563414117652593,
+      "pnl_pct": 0.5781707058826296,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 50.15,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 3.281629,
+          "interpretation": "Momentum haussier (croisement r\u00e9cent!)",
+          "direction_bias": "up",
+          "strength": 0.33455667400871897
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.526,
+          "interpretation": "Zone m\u00e9diane (53%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0013",
+      "timestamp": "2026-01-19T00:29:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-481",
+      "market_name": "Will BTC be higher than $92,638 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.4568961945389571,
+      "exit_price": 1.0,
+      "model_probability": 0.75,
+      "expected_value": 0.2931,
+      "confidence": 0.7568,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "win",
+      "pnl": 23.773619126290857,
+      "pnl_pct": 1.1886809563145428,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 46.11,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 63.8563,
+          "interpretation": "Momentum haussier",
+          "direction_bias": "up",
+          "strength": 0.6893073195179575
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.617,
+          "interpretation": "Zone m\u00e9diane (62%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0014",
+      "timestamp": "2026-01-19T01:59:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-487",
+      "market_name": "Will BTC be higher than $92,587 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.5065001327530405,
+      "exit_price": 0.0,
+      "model_probability": 0.75,
+      "expected_value": 0.2435,
+      "confidence": 0.6592,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "loss",
+      "pnl": -20.0,
+      "pnl_pct": -1.0,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 57.51,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 33.703702,
+          "interpretation": "Momentum haussier",
+          "direction_bias": "up",
+          "strength": 0.3640233404343207
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.774,
+          "interpretation": "Zone m\u00e9diane (77%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0015",
+      "timestamp": "2026-01-19T10:14:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-520",
+      "market_name": "Will BTC be higher than $92,968 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.41928879381531936,
+      "exit_price": 1.0,
+      "model_probability": 0.75,
+      "expected_value": 0.3307,
+      "confidence": 0.6504,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "win",
+      "pnl": 27.699820016676224,
+      "pnl_pct": 1.384991000833811,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 48.27,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 3.230265,
+          "interpretation": "Momentum haussier (croisement r\u00e9cent!)",
+          "direction_bias": "up",
+          "strength": 0.3347459811204448
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.478,
+          "interpretation": "Zone m\u00e9diane (48%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0016",
+      "timestamp": "2026-01-19T23:14:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-572",
+      "market_name": "Will BTC be higher than $92,442 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.44084510457600795,
+      "exit_price": 1.0,
+      "model_probability": 0.75,
+      "expected_value": 0.3092,
+      "confidence": 0.6547,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "win",
+      "pnl": 25.367408625837914,
+      "pnl_pct": 1.2683704312918958,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 41.54,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 4.531698,
+          "interpretation": "Momentum haussier (croisement r\u00e9cent!)",
+          "direction_bias": "up",
+          "strength": 0.3490219458797846
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.276,
+          "interpretation": "Zone m\u00e9diane (28%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0017",
+      "timestamp": "2026-01-20T04:29:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-593",
+      "market_name": "Will BTC be higher than $92,312 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.38455370016245916,
+      "exit_price": 0.0,
+      "model_probability": 0.75,
+      "expected_value": 0.3654,
+      "confidence": 0.6526,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "loss",
+      "pnl": -20.0,
+      "pnl_pct": -1.0,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 50.92,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 3.889807,
+          "interpretation": "Momentum haussier (croisement r\u00e9cent!)",
+          "direction_bias": "up",
+          "strength": 0.34213771907348767
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.643,
+          "interpretation": "Zone m\u00e9diane (64%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0018",
+      "timestamp": "2026-01-20T09:29:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-613",
+      "market_name": "Will BTC be higher than $91,046 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.37733147729074945,
+      "exit_price": 0.0,
+      "model_probability": 0.75,
+      "expected_value": 0.3727,
+      "confidence": 0.6569,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "loss",
+      "pnl": -20.0,
+      "pnl_pct": -1.0,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 56.58,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 5.132889,
+          "interpretation": "Momentum haussier (croisement r\u00e9cent!)",
+          "direction_bias": "up",
+          "strength": 0.35637685489936766
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.693,
+          "interpretation": "Zone m\u00e9diane (69%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0019",
+      "timestamp": "2026-01-20T12:29:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-625",
+      "market_name": "Will BTC be higher than $91,149 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.35632715854356634,
+      "exit_price": 1.0,
+      "model_probability": 0.75,
+      "expected_value": 0.3937,
+      "confidence": 0.6527,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "win",
+      "pnl": 36.12819433058932,
+      "pnl_pct": 1.806409716529466,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 44.35,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 3.862931,
+          "interpretation": "Momentum haussier (croisement r\u00e9cent!)",
+          "direction_bias": "up",
+          "strength": 0.34238048109182817
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.389,
+          "interpretation": "Zone m\u00e9diane (39%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0020",
+      "timestamp": "2026-01-20T14:29:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-633",
+      "market_name": "Will BTC be higher than $90,990 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.49424692021031136,
+      "exit_price": 1.0,
+      "model_probability": 0.75,
+      "expected_value": 0.2558,
+      "confidence": 0.6603,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "win",
+      "pnl": 20.465603693574103,
+      "pnl_pct": 1.0232801846787052,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 51.34,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 6.167615,
+          "interpretation": "Momentum haussier (croisement r\u00e9cent!)",
+          "direction_bias": "up",
+          "strength": 0.3677833568681306
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.547,
+          "interpretation": "Zone m\u00e9diane (55%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0021",
+      "timestamp": "2026-01-20T15:29:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-637",
+      "market_name": "Will BTC be higher than $90,626 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.6203958187703194,
+      "exit_price": 0.0,
+      "model_probability": 0.75,
+      "expected_value": 0.1296,
+      "confidence": 0.7145,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "loss",
+      "pnl": -20.0,
+      "pnl_pct": -1.0,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 58.22,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 49.682985,
+          "interpretation": "Momentum haussier",
+          "direction_bias": "up",
+          "strength": 0.5482200545796989
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.785,
+          "interpretation": "Zone m\u00e9diane (78%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0022",
+      "timestamp": "2026-01-20T17:59:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-647",
+      "market_name": "Will BTC be higher than $89,775 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.41403737943419283,
+      "exit_price": 1.0,
+      "model_probability": 0.75,
+      "expected_value": 0.336,
+      "confidence": 0.6737,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "win",
+      "pnl": 28.30481737501868,
+      "pnl_pct": 1.415240868750934,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 48.52,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 37.003745,
+          "interpretation": "Momentum haussier",
+          "direction_bias": "up",
+          "strength": 0.4121810647622713
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.739,
+          "interpretation": "Zone m\u00e9diane (74%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0023",
+      "timestamp": "2026-01-20T22:59:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-667",
+      "market_name": "Will BTC be higher than $88,509 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.5009546953084423,
+      "exit_price": 0.0,
+      "model_probability": 0.75,
+      "expected_value": 0.249,
+      "confidence": 0.7032,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "loss",
+      "pnl": -20.0,
+      "pnl_pct": -1.0,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 44.76,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 45.199521,
+          "interpretation": "Momentum haussier",
+          "direction_bias": "up",
+          "strength": 0.5106760752105144
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.579,
+          "interpretation": "Zone m\u00e9diane (58%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0024",
+      "timestamp": "2026-01-21T16:29:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-737",
+      "market_name": "Will BTC be higher than $89,584 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.4715350802709357,
+      "exit_price": 0.0,
+      "model_probability": 0.75,
+      "expected_value": 0.2785,
+      "confidence": 0.6952,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "loss",
+      "pnl": -20.0,
+      "pnl_pct": -1.0,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 44.24,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 16.483045,
+          "interpretation": "Momentum haussier (croisement r\u00e9cent!)",
+          "direction_bias": "up",
+          "strength": 0.48399521183658933
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.431,
+          "interpretation": "Zone m\u00e9diane (43%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0025",
+      "timestamp": "2026-01-21T17:29:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-741",
+      "market_name": "Will BTC be higher than $87,780 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.6287039403526348,
+      "exit_price": 1.0,
+      "model_probability": 0.75,
+      "expected_value": 0.1213,
+      "confidence": 0.7163,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "win",
+      "pnl": 11.811475507505437,
+      "pnl_pct": 0.5905737753752718,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 50.98,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 48.668964,
+          "interpretation": "Momentum haussier",
+          "direction_bias": "up",
+          "strength": 0.5544425191911918
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.755,
+          "interpretation": "Zone m\u00e9diane (76%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0026",
+      "timestamp": "2026-01-21T20:29:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-753",
+      "market_name": "Will BTC be higher than $89,743 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.44938333971564665,
+      "exit_price": 1.0,
+      "model_probability": 0.75,
+      "expected_value": 0.3006,
+      "confidence": 0.682,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "win",
+      "pnl": 24.505432739574346,
+      "pnl_pct": 1.2252716369787173,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 48.94,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 12.57571,
+          "interpretation": "Momentum haussier (croisement r\u00e9cent!)",
+          "direction_bias": "up",
+          "strength": 0.44012975852193664
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.546,
+          "interpretation": "Zone m\u00e9diane (55%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0027",
+      "timestamp": "2026-01-21T21:59:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-759",
+      "market_name": "Will BTC be higher than $90,249 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.35568237423950155,
+      "exit_price": 0.0,
+      "model_probability": 0.75,
+      "expected_value": 0.3943,
+      "confidence": 0.6509,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "loss",
+      "pnl": -20.0,
+      "pnl_pct": -1.0,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 56.19,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 3.286284,
+          "interpretation": "Momentum haussier (croisement r\u00e9cent!)",
+          "direction_bias": "up",
+          "strength": 0.3364134521486608
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.742,
+          "interpretation": "Zone m\u00e9diane (74%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0028",
+      "timestamp": "2026-01-22T11:44:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-814",
+      "market_name": "Will BTC be higher than $89,983 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.429143166586974,
+      "exit_price": 0.0,
+      "model_probability": 0.75,
+      "expected_value": 0.3209,
+      "confidence": 0.6577,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "loss",
+      "pnl": -20.0,
+      "pnl_pct": -1.0,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 52.34,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 5.304001,
+          "interpretation": "Momentum haussier (croisement r\u00e9cent!)",
+          "direction_bias": "up",
+          "strength": 0.35894417493308517
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.719,
+          "interpretation": "Zone m\u00e9diane (72%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0029",
+      "timestamp": "2026-01-22T14:29:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-825",
+      "market_name": "Will BTC be higher than $89,574 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.45679650471538485,
+      "exit_price": 0.0,
+      "model_probability": 0.75,
+      "expected_value": 0.2932,
+      "confidence": 0.6552,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "loss",
+      "pnl": -20.0,
+      "pnl_pct": -1.0,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 49.81,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 4.531126,
+          "interpretation": "Momentum haussier (croisement r\u00e9cent!)",
+          "direction_bias": "up",
+          "strength": 0.3505852401793392
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.487,
+          "interpretation": "Zone m\u00e9diane (49%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0030",
+      "timestamp": "2026-01-22T16:44:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-834",
+      "market_name": "Will BTC be higher than $88,972 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.5344037649290646,
+      "exit_price": 1.0,
+      "model_probability": 0.75,
+      "expected_value": 0.2156,
+      "confidence": 0.6551,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "win",
+      "pnl": 17.424886036599588,
+      "pnl_pct": 0.8712443018299794,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 52.8,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 4.483533,
+          "interpretation": "Momentum haussier (croisement r\u00e9cent!)",
+          "direction_bias": "up",
+          "strength": 0.3503923745647353
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.543,
+          "interpretation": "Zone m\u00e9diane (54%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0031",
+      "timestamp": "2026-01-22T20:59:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-851",
+      "market_name": "Will BTC be higher than $89,410 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.5845212501794936,
+      "exit_price": 1.0,
+      "model_probability": 0.75,
+      "expected_value": 0.1655,
+      "confidence": 0.7022,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "win",
+      "pnl": 14.216035762358407,
+      "pnl_pct": 0.7108017881179204,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 34.98,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 1.331551,
+          "interpretation": "Momentum haussier",
+          "direction_bias": "up",
+          "strength": 0.01489268578068621
+        },
+        {
+          "name": "Bollinger",
+          "value": -0.157,
+          "interpretation": "Proche bande basse (-16%)",
+          "direction_bias": "up",
+          "strength": 1.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0032",
+      "timestamp": "2026-01-23T05:59:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-887",
+      "market_name": "Will BTC be higher than $89,616 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.5195695235753004,
+      "exit_price": 1.0,
+      "model_probability": 0.75,
+      "expected_value": 0.2304,
+      "confidence": 0.6618,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "win",
+      "pnl": 18.493404813997778,
+      "pnl_pct": 0.9246702406998889,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 49.44,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 6.503436,
+          "interpretation": "Momentum haussier (croisement r\u00e9cent!)",
+          "direction_bias": "up",
+          "strength": 0.3725700030764976
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.554,
+          "interpretation": "Zone m\u00e9diane (55%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0033",
+      "timestamp": "2026-01-23T14:59:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-923",
+      "market_name": "Will BTC be higher than $89,018 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.5035284542453393,
+      "exit_price": 0.0,
+      "model_probability": 0.75,
+      "expected_value": 0.2465,
+      "confidence": 0.6671,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "loss",
+      "pnl": -20.0,
+      "pnl_pct": -1.0,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 50.01,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 34.739514,
+          "interpretation": "Momentum haussier",
+          "direction_bias": "up",
+          "strength": 0.3902533458827585
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.742,
+          "interpretation": "Zone m\u00e9diane (74%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0034",
+      "timestamp": "2026-01-23T19:44:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-942",
+      "market_name": "Will BTC be higher than $89,880 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.5240537099958782,
+      "exit_price": 1.0,
+      "model_probability": 0.75,
+      "expected_value": 0.2259,
+      "confidence": 0.6524,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "win",
+      "pnl": 18.16402711881823,
+      "pnl_pct": 0.9082013559409114,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 46.47,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 30.671356,
+          "interpretation": "Momentum haussier",
+          "direction_bias": "up",
+          "strength": 0.3412486355179744
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.599,
+          "interpretation": "Zone m\u00e9diane (60%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0035",
+      "timestamp": "2026-01-23T20:44:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-946",
+      "market_name": "Will BTC be higher than $89,422 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.3851616987498909,
+      "exit_price": 1.0,
+      "model_probability": 0.75,
+      "expected_value": 0.3648,
+      "confidence": 0.6738,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "win",
+      "pnl": 31.926243094558643,
+      "pnl_pct": 1.5963121547279322,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 34.06,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 10.077096,
+          "interpretation": "Momentum haussier (croisement r\u00e9cent!)",
+          "direction_bias": "up",
+          "strength": 0.4126911235513405
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.371,
+          "interpretation": "Zone m\u00e9diane (37%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0036",
+      "timestamp": "2026-01-24T13:59:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-1015",
+      "market_name": "Will BTC be higher than $89,368 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.6370110554760542,
+      "exit_price": 1.0,
+      "model_probability": 0.7323,
+      "expected_value": 0.0952,
+      "confidence": 0.6965,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "win",
+      "pnl": 11.396629349004789,
+      "pnl_pct": 0.5698314674502394,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 1.91,
+          "interpretation": "Survendu (potentiel rebond)",
+          "direction_bias": "up",
+          "strength": 0.9364566575677546
+        },
+        {
+          "name": "MACD",
+          "value": -10.877634,
+          "interpretation": "Momentum baissier",
+          "direction_bias": "down",
+          "strength": 0.12171702161721329
+        },
+        {
+          "name": "Bollinger",
+          "value": -0.562,
+          "interpretation": "Proche bande basse (-56%)",
+          "direction_bias": "up",
+          "strength": 1.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0037",
+      "timestamp": "2026-01-25T15:29:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-1117",
+      "market_name": "Will BTC be higher than $88,743 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.426317930487469,
+      "exit_price": 0.0,
+      "model_probability": 0.75,
+      "expected_value": 0.3237,
+      "confidence": 0.6611,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "loss",
+      "pnl": -20.0,
+      "pnl_pct": -1.0,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 58.69,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 6.233854,
+          "interpretation": "Momentum haussier (croisement r\u00e9cent!)",
+          "direction_bias": "up",
+          "strength": 0.37024643618292624
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.716,
+          "interpretation": "Zone m\u00e9diane (72%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0038",
+      "timestamp": "2026-01-25T18:59:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-1131",
+      "market_name": "Will BTC be higher than $87,420 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.5741005317316948,
+      "exit_price": 0.0,
+      "model_probability": 0.75,
+      "expected_value": 0.1759,
+      "confidence": 0.6712,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "loss",
+      "pnl": -20.0,
+      "pnl_pct": -1.0,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 52.69,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 35.312245,
+          "interpretation": "Momentum haussier",
+          "direction_bias": "up",
+          "strength": 0.403937782959497
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.758,
+          "interpretation": "Zone m\u00e9diane (76%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0039",
+      "timestamp": "2026-01-25T19:44:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-1134",
+      "market_name": "Will BTC be higher than $86,707 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.5991584095745158,
+      "exit_price": 0.0,
+      "model_probability": 0.75,
+      "expected_value": 0.1508,
+      "confidence": 0.7297,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "loss",
+      "pnl": -20.0,
+      "pnl_pct": -1.0,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 48.06,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 51.946066,
+          "interpretation": "Momentum haussier",
+          "direction_bias": "up",
+          "strength": 0.599101361626873
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.753,
+          "interpretation": "Zone m\u00e9diane (75%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0040",
+      "timestamp": "2026-01-25T20:44:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-1138",
+      "market_name": "Will BTC be higher than $86,333 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.6298132532817473,
+      "exit_price": 1.0,
+      "model_probability": 0.75,
+      "expected_value": 0.1202,
+      "confidence": 0.6507,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "win",
+      "pnl": 11.755444801751398,
+      "pnl_pct": 0.5877722400875699,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 44.89,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 3.074273,
+          "interpretation": "Momentum haussier (croisement r\u00e9cent!)",
+          "direction_bias": "up",
+          "strength": 0.33560960111472204
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.391,
+          "interpretation": "Zone m\u00e9diane (39%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0041",
+      "timestamp": "2026-01-26T03:44:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-1166",
+      "market_name": "Will BTC be higher than $87,359 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.6427424358738039,
+      "exit_price": 0.0,
+      "model_probability": 0.75,
+      "expected_value": 0.1073,
+      "confidence": 0.6579,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "loss",
+      "pnl": -20.0,
+      "pnl_pct": -1.0,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 40.23,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 5.225652,
+          "interpretation": "Momentum haussier (croisement r\u00e9cent!)",
+          "direction_bias": "up",
+          "strength": 0.3598180489107432
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.392,
+          "interpretation": "Zone m\u00e9diane (39%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0042",
+      "timestamp": "2026-01-26T03:59:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-1167",
+      "market_name": "Will BTC be higher than $87,282 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.4233177301835132,
+      "exit_price": 1.0,
+      "model_probability": 0.75,
+      "expected_value": 0.3267,
+      "confidence": 0.6649,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "win",
+      "pnl": 27.245835867375,
+      "pnl_pct": 1.36229179336875,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 48.76,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 7.257366,
+          "interpretation": "Momentum haussier (croisement r\u00e9cent!)",
+          "direction_bias": "up",
+          "strength": 0.383148433958729
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.535,
+          "interpretation": "Zone m\u00e9diane (54%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0043",
+      "timestamp": "2026-01-26T13:14:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-1204",
+      "market_name": "Will BTC be higher than $87,830 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.5508758067445866,
+      "exit_price": 1.0,
+      "model_probability": 0.75,
+      "expected_value": 0.1991,
+      "confidence": 0.6629,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "win",
+      "pnl": 16.30582384474364,
+      "pnl_pct": 0.8152911922371819,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 57.78,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 6.699547,
+          "interpretation": "Momentum haussier (croisement r\u00e9cent!)",
+          "direction_bias": "up",
+          "strength": 0.3762787058546043
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.773,
+          "interpretation": "Zone m\u00e9diane (77%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0044",
+      "timestamp": "2026-01-26T14:44:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-1210",
+      "market_name": "Will BTC be higher than $88,144 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.48741834855029564,
+      "exit_price": 1.0,
+      "model_probability": 0.75,
+      "expected_value": 0.2626,
+      "confidence": 0.6535,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "win",
+      "pnl": 21.032513567626278,
+      "pnl_pct": 1.0516256783813138,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 57.33,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 30.42422,
+          "interpretation": "Momentum haussier",
+          "direction_bias": "up",
+          "strength": 0.34516460526425036
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.688,
+          "interpretation": "Zone m\u00e9diane (69%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0045",
+      "timestamp": "2026-01-26T14:59:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-1211",
+      "market_name": "Will BTC be higher than $88,178 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.3575206083431324,
+      "exit_price": 1.0,
+      "model_probability": 0.75,
+      "expected_value": 0.3925,
+      "confidence": 0.6528,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "win",
+      "pnl": 35.94083119484091,
+      "pnl_pct": 1.7970415597420455,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 57.68,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 3.76637,
+          "interpretation": "Momentum haussier (croisement r\u00e9cent!)",
+          "direction_bias": "up",
+          "strength": 0.3427132102758175
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.625,
+          "interpretation": "Zone m\u00e9diane (62%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0046",
+      "timestamp": "2026-01-26T15:59:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-1215",
+      "market_name": "Will BTC be higher than $87,641 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.5746355054207772,
+      "exit_price": 0.0,
+      "model_probability": 0.75,
+      "expected_value": 0.1754,
+      "confidence": 0.6873,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "loss",
+      "pnl": -20.0,
+      "pnl_pct": -1.0,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 40.73,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 40.101149,
+          "interpretation": "Momentum haussier",
+          "direction_bias": "up",
+          "strength": 0.45755937454545864
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.681,
+          "interpretation": "Zone m\u00e9diane (68%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0047",
+      "timestamp": "2026-01-26T16:29:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-1217",
+      "market_name": "Will BTC be higher than $87,698 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.5255706213242555,
+      "exit_price": 0.0,
+      "model_probability": 0.75,
+      "expected_value": 0.2244,
+      "confidence": 0.6556,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "loss",
+      "pnl": -20.0,
+      "pnl_pct": -1.0,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 53.3,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 30.878237,
+          "interpretation": "Momentum haussier",
+          "direction_bias": "up",
+          "strength": 0.3520993594509168
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.65,
+          "interpretation": "Zone m\u00e9diane (65%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0048",
+      "timestamp": "2026-01-26T22:29:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-1241",
+      "market_name": "Will BTC be higher than $88,092 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.5171309921762124,
+      "exit_price": 1.0,
+      "model_probability": 0.75,
+      "expected_value": 0.2329,
+      "confidence": 0.6519,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "win",
+      "pnl": 18.674920479693473,
+      "pnl_pct": 0.9337460239846737,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 54.76,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 3.49441,
+          "interpretation": "Momentum haussier (croisement r\u00e9cent!)",
+          "direction_bias": "up",
+          "strength": 0.3396677428290786
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.705,
+          "interpretation": "Zone m\u00e9diane (71%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0049",
+      "timestamp": "2026-01-27T04:59:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-1267",
+      "market_name": "Will BTC be higher than $88,580 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.566328911725541,
+      "exit_price": 0.0,
+      "model_probability": 0.75,
+      "expected_value": 0.1837,
+      "confidence": 0.6529,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "loss",
+      "pnl": -20.0,
+      "pnl_pct": -1.0,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 34.99,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 3.799673,
+          "interpretation": "Momentum haussier (croisement r\u00e9cent!)",
+          "direction_bias": "up",
+          "strength": 0.3428955825633083
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.333,
+          "interpretation": "Zone m\u00e9diane (33%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    },
+    {
+      "id": "SIM-20260128-180516-a2a3ec-T0050",
+      "timestamp": "2026-01-27T17:29:00Z",
+      "simulation_id": "SIM-20260128-180516-a2a3ec",
+      "market_id": "mock-btc-15min-1317",
+      "market_name": "Will BTC be higher than $87,894 in 15 minutes?",
+      "direction": "up",
+      "entry_price": 0.4488446712094586,
+      "exit_price": 0.0,
+      "model_probability": 0.75,
+      "expected_value": 0.3012,
+      "confidence": 0.6969,
+      "position_size": 20.0,
+      "position_pct": 0.02,
+      "result": "loss",
+      "pnl": -20.0,
+      "pnl_pct": -1.0,
+      "indicator_signals": [
+        {
+          "name": "RSI",
+          "value": 41.03,
+          "interpretation": "Zone neutre",
+          "direction_bias": null,
+          "strength": 0.0
+        },
+        {
+          "name": "MACD",
+          "value": 43.034698,
+          "interpretation": "Momentum haussier",
+          "direction_bias": "up",
+          "strength": 0.4896185928249659
+        },
+        {
+          "name": "Bollinger",
+          "value": 0.539,
+          "interpretation": "Zone m\u00e9diane (54%)",
+          "direction_bias": null,
+          "strength": 0.0
+        }
+      ]
+    }
+  ],
+  "metrics": {
+    "total_trades": 50,
+    "winning_trades": 29,
+    "losing_trades": 21,
+    "win_rate": 0.58,
+    "avg_win": 21.207654118912625,
+    "avg_loss": -20.0,
+    "total_pnl": 195.02196944846696,
+    "total_pnl_pct": 0.19502196944846698,
+    "avg_ev_expected": 0.25184,
+    "avg_ev_realized": 0.0039004393889693397,
+    "max_drawdown": 0.0,
+    "sharpe_ratio": null
+  },
+  "ai_explanation": "## Analyse de Tes R\u00e9sultats de Trading \ud83d\udcca\n\n### 1. R\u00e9sum\u00e9 Simple\nTa strat\u00e9gie \"Balanced Momentum\" a transform\u00e9 1000$ en 1195$ en 14 jours, soit un gain de 19.5% ! C'est comme si tu avais plant\u00e9 une graine et qu'elle avait pouss\u00e9 de presque 20% en deux semaines. Cependant, il y a un \u00e9cart important entre ce que l'algorithme pr\u00e9disait (+25.2%) et ce qui s'est r\u00e9ellement pass\u00e9 (+0.4% par trade en moyenne).\n\n### 2. Pourquoi Ces R\u00e9sultats\n\n**\ud83c\udfaf Points forts identifi\u00e9s :**\n- **S\u00e9lection d\u00e9cente des opportunit\u00e9s** : 58% de tes trades ont \u00e9t\u00e9 gagnants (29 sur 50), c'est mieux qu'\u00e0 pile ou face !\n- **Gestion du risque efficace** : Tes pertes maximales sont plafonn\u00e9es \u00e0 -20$, ce qui prot\u00e8ge ton capital\n- **Strat\u00e9gie coh\u00e9rente** : Les 3 meilleurs trades ont tous vis\u00e9 des positions \"UP\" avec des prix d'entr\u00e9e bas (autour de 0.35-0.38)\n\n**\ud83d\udd0d Zones d'am\u00e9lioration d\u00e9couvertes :**\n- **Pr\u00e9dictions trop optimistes** : L'\u00e9cart entre EV attendue (25.2%) et r\u00e9alis\u00e9e (0.4%) sugg\u00e8re que les indicateurs techniques surestiment les opportunit\u00e9s\n- **Entr\u00e9es \u00e0 prix \u00e9lev\u00e9 probl\u00e9matiques** : Tes pires trades ont tous des prix d'entr\u00e9e \u00e9lev\u00e9s (0.44-0.56), indiquant qu'acheter \"cher\" est risqu\u00e9\n\n### 3. Le\u00e7ons Apprises\n\n**\ud83d\udca1 R\u00e8gle du \"Prix d'Entr\u00e9e Magique\"** : Tes meilleurs gains viennent d'achats autour de 0.35-0.38. Au-dessus de 0.44, le risque de perte augmente drastiquement.\n\n**\ud83d\udcca R\u00e8gle de l'Humilit\u00e9 Algorithmique** : Divise toujours les pr\u00e9dictions d'esp\u00e9rance par 2 ou 3. Si l'algo dit +25%, table plut\u00f4t sur +8-12% pour \u00eatre r\u00e9aliste.\n\n**\u2696\ufe0f R\u00e8gle du Ratio Gagnant** : Avec 58% de r\u00e9ussite, tu es sur la bonne voie, mais vise 65%+ pour une strat\u00e9gie vraiment robuste.\n\n### 4. Prochaines Exp\u00e9riences\n\n**\ud83d\udd27 Test des seuils de prix** : Modifie ta strat\u00e9gie pour ne prendre que des positions UP quand le prix est < 0.40. Compare les r\u00e9sultats avec la version actuelle.\n\n**\ud83d\udcc8 Optimisation des indicateurs** : Teste un RSI plus r\u00e9actif (p\u00e9riode 7 au lieu de 14) et des Bollinger Bands plus serr\u00e9es (std 1.5 au lieu de 2.0) pour des signaux plus pr\u00e9cis.\n\n**\u23f0 Extension temporelle** : Lance la m\u00eame strat\u00e9gie sur 30 jours pour voir si le pattern de prix d'entr\u00e9e se confirme sur une p\u00e9riode plus longue.\n\n**Bravo pour ce premier test ! Un gain de 19.5% en 14 jours montre que tu as saisi les bases. Maintenant, affine ton approche avec ces d\u00e9couvertes ! \ud83d\ude80**",
+  "lessons_learned": [],
+  "suggested_experiments": []
+}

@@ -1,0 +1,36 @@
+installation:
+  version: 6.0.0-Beta.2
+  installDate: 2026-01-28T13:25:03.083Z
+  lastUpdated: 2026-01-28T13:25:03.083Z
+modules:
+  - name: core
+    version: 6.0.0-Beta.2
+    installDate: 2026-01-28T13:25:02.475Z
+    lastUpdated: 2026-01-28T13:25:02.475Z
+    source: built-in
+    npmPackage: null
+    repoUrl: null
+  - name: bmm
+    version: 6.0.0-Beta.2
+    installDate: 2026-01-28T13:24:59.677Z
+    lastUpdated: 2026-01-28T13:25:02.475Z
+    source: built-in
+    npmPackage: null
+    repoUrl: null
+  - name: bmb
+    version: 0.1.3
+    installDate: 2026-01-28T13:25:01.134Z
+    lastUpdated: 2026-01-28T13:25:02.778Z
+    source: external
+    npmPackage: bmad-builder
+    repoUrl: https://github.com/bmad-code-org/bmad-builder
+  - name: cis
+    version: 0.1.3
+    installDate: 2026-01-28T13:25:02.456Z
+    lastUpdated: 2026-01-28T13:25:03.083Z
+    source: external
+    npmPackage: bmad-creative-intelligence-suite
+    repoUrl: https://github.com/bmad-code-org/bmad-module-creative-intelligence-suite
+ides:
+  - claude-code
+  - cursor

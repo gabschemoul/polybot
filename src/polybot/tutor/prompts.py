@@ -160,4 +160,19 @@ TOOLTIPS = {
                   "Prix proche de la bande basse: Marché déprimé, potentiel rebond. "
                   "Utile pour détecter les extrêmes.",
     },
+    "position_sizing": {
+        "name": "Méthode de Position",
+        "simple": "Comment calculer la taille de chaque trade.",
+        "detail": "**Kelly**: Taille optimale basée sur ton avantage statistique. "
+                  "**Fixe**: Toujours le même % du capital. "
+                  "**Martingale**: Double après chaque perte (DANGEREUX - éducatif seulement).",
+    },
+    "martingale": {
+        "name": "Martingale",
+        "simple": "Double ta mise après chaque perte pour 'récupérer'.",
+        "detail": "⚠️ ATTENTION: Stratégie très risquée ! "
+                  "Théorie: Une victoire récupère toutes les pertes précédentes. "
+                  "Réalité: Quelques pertes de suite peuvent vider ton capital. "
+                  "Utile à simuler pour comprendre POURQUOI c'est dangereux.",
+    },
 }

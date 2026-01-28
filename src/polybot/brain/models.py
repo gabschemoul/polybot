@@ -16,6 +16,14 @@ class StrategyApproach(str, Enum):
     AUTO = "auto"
 
 
+class PositionSizing(str, Enum):
+    """Position sizing method."""
+
+    KELLY = "kelly"  # Kelly Criterion - size based on edge
+    FIXED = "fixed"  # Fixed percentage of capital
+    MARTINGALE = "martingale"  # Double after each loss
+
+
 class TradeDirection(str, Enum):
     """Direction of a trade."""
 
@@ -55,6 +63,10 @@ class StrategyConfig(BaseModel):
     # Risk management
     initial_capital: float = Field(default=1000.0, gt=0)
     max_position_pct: float = Field(default=0.02, gt=0, le=0.5, description="Max position as % of capital")
+
+    # Position sizing
+    position_sizing: PositionSizing = Field(default=PositionSizing.KELLY, description="Position sizing method")
+    martingale_base_pct: float = Field(default=0.01, gt=0, le=0.1, description="Base position for martingale (1% = 0.01)")
 
 
 class IndicatorSignal(BaseModel):
@@ -146,6 +158,10 @@ class SimulationMetrics(BaseModel):
 
     max_drawdown: float = 0.0
     sharpe_ratio: float | None = None
+
+    # Martingale specific
+    max_consecutive_losses: int = 0
+    max_position_used: float = 0.0  # Largest position taken
 
 
 class Simulation(BaseModel):
