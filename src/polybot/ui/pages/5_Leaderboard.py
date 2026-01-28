@@ -3,9 +3,13 @@
 import streamlit as st
 import pandas as pd
 
-from polybot.storage import get_strategy_store
-
 st.set_page_config(page_title="Classement - PolyBot", page_icon="🏆", layout="wide")
+
+
+def get_strategy_store():
+    """Lazy import to avoid circular imports."""
+    from polybot.storage.strategies import StrategyStore
+    return StrategyStore()
 
 st.title("🏆 Classement des Stratégies")
 
