@@ -16,7 +16,7 @@ from polybot.brain.models import (
 from polybot.brain.indicators import calculate_indicators
 from polybot.brain.ev_calculator import generate_signal
 from polybot.data.crypto_data import CryptoDataClient
-from polybot.data.polymarket import MockPolymarketClient
+# Real BTC data only - no fake Polymarket simulation needed
 from polybot.storage import get_simulation_store
 
 st.set_page_config(page_title="Simulate - PolyBot", page_icon="🚀", layout="wide")
@@ -114,8 +114,7 @@ if st.button("🚀 Lancer la Simulation", type="primary", use_container_width=Tr
         # Step 3: Simulate market windows (every 15 minutes)
         progress_bar.progress(40, text="Simulation des trades...")
 
-        # Mock Polymarket client for testing
-        polymarket = MockPolymarketClient()
+        # Using real BTC data with simple 50/50 binary bets
 
         # Initialize simulation
         sim_store = get_simulation_store()
@@ -197,14 +196,14 @@ if st.button("🚀 Lancer la Simulation", type="primary", use_container_width=Tr
             # Get current BTC price
             btc_price = window_df["close"].iloc[-1]
 
-            # Generate mock market (simulating Polymarket)
-            mock_market = polymarket.generate_mock_market(btc_price)
-            market_price = float(mock_market["outcomePrices"][0])
+            # Simple 50/50 market - like a real binary bet
+            # No need to simulate fake Polymarket odds
+            market_price = 0.50  # Fair odds: win = double your money, lose = lose it all
 
             # Generate signal
             signal = generate_signal(
-                market_id=mock_market["id"],
-                market_name=mock_market["question"],
+                market_id=f"btc-15min-{i}",
+                market_name=f"BTC > ${btc_price:,.0f} dans 15 min?",
                 btc_price=btc_price,
                 market_price=market_price,
                 indicator_signals=signals,
