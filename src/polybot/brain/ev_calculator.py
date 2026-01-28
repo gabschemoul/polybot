@@ -63,13 +63,16 @@ def combine_indicator_signals(
         winning_signals = down_votes
         raw_prob = down_count / (up_count + down_count)
 
-    # Boost probability based on agreement strength (average strength of winners)
+    # Realistic probability: technical indicators give a SMALL edge, not a big one
+    # Base: 50% (no edge). Indicator agreement adds a modest boost.
+    # 2/3 indicators agree -> ~52-53% edge (realistic for short-term trading)
+    # 3/3 indicators agree -> ~54-55% edge
+    agreement_ratio = len(winning_signals) / len(directional_signals)
     avg_strength = sum(s.strength for s in winning_signals) / len(winning_signals)
-    raw_prob = min(0.95, raw_prob + avg_strength * 0.1)
 
-    # Scale to realistic probability range (0.45 - 0.75 for crypto short-term)
-    # No model should claim >75% accuracy on 15-min crypto movements
-    scaled_prob = 0.45 + (raw_prob * 0.30)
+    # Max edge from indicators: ~5% (50% -> 55%)
+    edge = agreement_ratio * avg_strength * 0.05
+    scaled_prob = 0.50 + edge
 
     # Build reasoning
     signal_descriptions = [f"{s.name}: {s.interpretation}" for s in winning_signals]
