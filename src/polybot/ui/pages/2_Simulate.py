@@ -126,6 +126,7 @@ if st.button("🚀 Lancer la Simulation", type="primary", use_container_width=Tr
         debug_signals_down = 0
         debug_signals_neutral = 0
         debug_sample_signals = []
+        debug_direction_choices = []  # Track why direction was chosen
 
         trades: list[Trade] = []
         capital = config.initial_capital
@@ -210,6 +211,10 @@ if st.button("🚀 Lancer la Simulation", type="primary", use_container_width=Tr
                 config=config,
                 timestamp=window_df["timestamp"].iloc[-1],
             )
+
+            # DEBUG: Track direction choices
+            if signal.should_trade and len(debug_direction_choices) < 10:
+                debug_direction_choices.append(f"{signal.direction.value}: {signal.reasoning_summary[:50]}")
 
             # If signal says trade
             if signal.should_trade and capital > 0:
@@ -385,6 +390,7 @@ if st.button("🚀 Lancer la Simulation", type="primary", use_container_width=Tr
         st.markdown("#### 🔧 DEBUG - Signaux bruts des indicateurs")
         st.write(f"Signaux UP: {debug_signals_up} | Signaux DOWN: {debug_signals_down} | Signaux NEUTRES: {debug_signals_neutral}")
         st.write(f"Exemples de signaux: {debug_sample_signals[:3]}")
+        st.write(f"Exemples de décisions: {debug_direction_choices[:5]}")
 
         st.markdown("#### 🔧 DEBUG - Trades exécutés")
         st.write(f"Total trades: {len(trades)}")

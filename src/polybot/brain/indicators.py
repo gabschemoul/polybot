@@ -92,8 +92,11 @@ def calculate_macd(
             interpretation += " (croisement récent!)"
         direction = TradeDirection.DOWN
 
-    # Strength based on histogram magnitude and crossover
-    strength = min(1.0, abs(histogram) / df["close"].iloc[-1] * 1000)
+    # Strength based on histogram magnitude (normalized by price percentage)
+    # Use percentage of price to normalize across different price levels
+    price = df["close"].iloc[-1]
+    histogram_pct = abs(histogram) / price * 100  # As percentage
+    strength = min(1.0, histogram_pct * 2)  # 0.5% move = strength 1.0
     if crossover:
         strength = min(1.0, strength + 0.3)
 
