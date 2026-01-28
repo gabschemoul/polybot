@@ -3,6 +3,7 @@
 from polybot.brain.models import (
     IndicatorConfig,
     IndicatorSignal,
+    PositionSizing,
     Signal,
     StrategyApproach,
     StrategyConfig,
@@ -14,6 +15,7 @@ from polybot.brain.models import (
 __all__ = [
     "IndicatorConfig",
     "IndicatorSignal",
+    "PositionSizing",
     "Signal",
     "StrategyApproach",
     "StrategyConfig",
